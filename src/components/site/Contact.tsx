@@ -1,12 +1,21 @@
-import { Phone, Mail, MapPin, Send } from "lucide-react";
+import { Phone, Mail, MapPin, Send, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLang } from "@/context/LanguageContext";
+import { fleet } from "@/data/fleet";
+
+const PHONES = ["01965155166", "01913156741", "01940142297"];
+const WHATSAPP = "01709539837";
+const EMAIL = "ahasanulhaqueabir2012@gmail.com";
+const ADDRESS_EN = "Rongmehar, Tongibari, Munshiganj";
+const ADDRESS_BN = "রংমেহার, টংগিবাড়ী, মুন্সিগঞ্জ";
 
 const Contact = () => {
   const { toast } = useToast();
+  const { t, lang } = useLang();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast({ title: "Quote Requested!", description: "Our team will contact you within 30 minutes." });
+    toast({ title: t("quote_done"), description: t("quote_done_d") });
     (e.target as HTMLFormElement).reset();
   };
 
@@ -15,43 +24,95 @@ const Contact = () => {
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-widest text-brand-red">Get In Touch</span>
+            <span className="text-xs font-semibold uppercase tracking-widest text-brand-red">{t("contact_kicker")}</span>
             <h2 className="mt-3 font-display font-bold text-4xl md:text-5xl text-balance">
-              Contact us & request your quote.
+              {t("contact_title")}
             </h2>
-            <p className="mt-4 text-muted-foreground max-w-md">
-              Our team is available 24/7 for bookings, queries, and custom travel plans across Bangladesh.
-            </p>
+            <p className="mt-4 text-muted-foreground max-w-md">{t("contact_sub")}</p>
 
             <div className="mt-8 space-y-4">
-              <ContactItem icon={Phone} label="Call Us" value="+880 1700-000 000" href="tel:+8801700000000" />
-              <ContactItem icon={Mail} label="Email" value="hello@easycar.bd" href="mailto:hello@easycar.bd" />
-              <ContactItem icon={MapPin} label="Office" value="Gulshan-1, Dhaka, Bangladesh" />
+              <div>
+                <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-2">{t("call_us")}</div>
+                <div className="grid sm:grid-cols-2 gap-2">
+                  {PHONES.map((p) => (
+                    <a
+                      key={p}
+                      href={`tel:+88${p}`}
+                      className="flex items-center gap-3 rounded-xl border border-border bg-background hover:border-brand-yellow hover:shadow-card transition-smooth p-3"
+                    >
+                      <div className="h-10 w-10 rounded-lg bg-brand-yellow text-brand-black grid place-items-center">
+                        <Phone className="h-4 w-4" />
+                      </div>
+                      <span className="font-semibold text-sm">+88 {p}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <a
+                href={`https://wa.me/88${WHATSAPP}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 rounded-xl border border-border bg-background hover:border-[#25D366] hover:shadow-card transition-smooth p-3"
+              >
+                <div className="h-12 w-12 rounded-xl bg-[#25D366] text-white grid place-items-center">
+                  <MessageCircle className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{t("whatsapp")}</div>
+                  <div className="font-semibold">+88 {WHATSAPP}</div>
+                </div>
+              </a>
+
+              <a
+                href={`mailto:${EMAIL}`}
+                className="flex items-center gap-4 rounded-xl border border-border bg-background hover:border-brand-yellow hover:shadow-card transition-smooth p-3"
+              >
+                <div className="h-12 w-12 rounded-xl bg-brand-yellow text-brand-black grid place-items-center">
+                  <Mail className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{t("email")}</div>
+                  <div className="font-semibold truncate">{EMAIL}</div>
+                </div>
+              </a>
+
+              <div className="flex items-center gap-4 rounded-xl border border-border bg-background p-3">
+                <div className="h-12 w-12 rounded-xl bg-brand-yellow text-brand-black grid place-items-center">
+                  <MapPin className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{t("office")}</div>
+                  <div className="font-semibold">{lang === "bn" ? ADDRESS_BN : ADDRESS_EN}</div>
+                </div>
+              </div>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="rounded-2xl bg-background border border-border p-6 md:p-8 shadow-card">
-            <h3 className="font-display font-bold text-2xl">Request a Quote</h3>
-            <p className="text-sm text-muted-foreground mt-1">Tell us about your trip — we'll send a tailored quote.</p>
+            <h3 className="font-display font-bold text-2xl">{t("request_quote")}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{t("quote_sub")}</p>
 
             <div className="mt-6 space-y-4">
-              <Input label="Full Name" placeholder="John Doe" required />
+              <Input label={t("full_name")} placeholder="Md. Karim" required maxLength={100} />
               <div className="grid sm:grid-cols-2 gap-4">
-                <Input label="Phone" type="tel" placeholder="+880..." required />
-                <Input label="Email" type="email" placeholder="you@example.com" />
+                <Input label={t("phone")} type="tel" placeholder="+880..." required maxLength={20} />
+                <Input label={t("email")} type="email" placeholder="you@example.com" maxLength={120} />
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Vehicle Needed</label>
+                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("vehicle_needed")}</label>
                 <select className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-3 text-sm outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth">
-                  <option>CNG</option><option>Axio</option><option>Allion</option>
-                  <option>Noah</option><option>Hiace</option><option>Bus</option>
+                  {fleet.map((c) => (
+                    <option key={c.key}>{c.name}</option>
+                  ))}
                 </select>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Message</label>
+                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("message")}</label>
                 <textarea
                   rows={4}
-                  placeholder="Trip details, dates, destinations..."
+                  maxLength={1000}
+                  placeholder={t("msg_ph")}
                   className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-3 text-sm outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth resize-none"
                 />
               </div>
@@ -60,7 +121,7 @@ const Contact = () => {
                 type="submit"
                 className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-yellow text-brand-black font-semibold py-3.5 hover:bg-brand-black hover:text-brand-yellow transition-smooth"
               >
-                Send Request <Send className="h-4 w-4" />
+                {t("send_request")} <Send className="h-4 w-4" />
               </button>
             </div>
           </form>
@@ -79,20 +140,5 @@ const Input = ({ label, ...props }: { label: string } & React.InputHTMLAttribute
     />
   </div>
 );
-
-const ContactItem = ({ icon: Icon, label, value, href }: { icon: typeof Phone; label: string; value: string; href?: string }) => {
-  const content = (
-    <div className="flex items-center gap-4 group">
-      <div className="h-12 w-12 rounded-xl bg-brand-yellow text-brand-black grid place-items-center group-hover:scale-110 transition-smooth">
-        <Icon className="h-5 w-5" />
-      </div>
-      <div>
-        <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{label}</div>
-        <div className="font-semibold">{value}</div>
-      </div>
-    </div>
-  );
-  return href ? <a href={href} className="block">{content}</a> : content;
-};
 
 export default Contact;

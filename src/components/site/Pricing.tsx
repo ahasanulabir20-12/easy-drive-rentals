@@ -1,26 +1,24 @@
 import { Info } from "lucide-react";
-
-const rows = [
-  { vehicle: "CNG", area: "Inside Dhaka Daily", fare: "1,500 BDT" },
-  { vehicle: "Axio", area: "Inside Dhaka Daily", fare: "3,500 BDT" },
-  { vehicle: "Allion", area: "Inside Dhaka Daily", fare: "4,000 BDT" },
-  { vehicle: "Noah", area: "Outside Dhaka Trip", fare: "7,500 BDT" },
-  { vehicle: "Hiace", area: "Outside Dhaka Trip", fare: "9,500 BDT" },
-  { vehicle: "Bus", area: "Outside Dhaka Trip", fare: "18,000 BDT" },
-];
+import { fleet } from "@/data/fleet";
+import { useLang } from "@/context/LanguageContext";
 
 const Pricing = () => {
+  const { t, lang } = useLang();
+  const rows = fleet.map((c) => ({
+    vehicle: c.name,
+    area: lang === "bn" ? c.area.bn : c.area.en,
+    fare: c.fare,
+  }));
+
   return (
     <section id="pricing" className="py-20 md:py-28 bg-background">
       <div className="container">
         <div className="text-center max-w-2xl mx-auto">
-          <span className="text-xs font-semibold uppercase tracking-widest text-brand-red">Transparent Pricing</span>
+          <span className="text-xs font-semibold uppercase tracking-widest text-brand-red">{t("pricing_kicker")}</span>
           <h2 className="mt-3 font-display font-bold text-4xl md:text-5xl text-balance">
-            Estimated Fare Guide
+            {t("pricing_title")}
           </h2>
-          <p className="mt-4 text-muted-foreground">
-            Clear, upfront pricing for every vehicle in our fleet. No hidden charges.
-          </p>
+          <p className="mt-4 text-muted-foreground">{t("pricing_sub")}</p>
         </div>
 
         {/* Desktop table */}
@@ -28,9 +26,9 @@ const Pricing = () => {
           <table className="w-full text-left">
             <thead className="bg-brand-black text-white">
               <tr>
-                <th className="px-6 py-4 font-display text-sm uppercase tracking-wider">Vehicle Type</th>
-                <th className="px-6 py-4 font-display text-sm uppercase tracking-wider">Service Area</th>
-                <th className="px-6 py-4 font-display text-sm uppercase tracking-wider text-right">Estimated Base Fare</th>
+                <th className="px-6 py-4 font-display text-sm uppercase tracking-wider">{t("th_vehicle")}</th>
+                <th className="px-6 py-4 font-display text-sm uppercase tracking-wider">{t("th_area")}</th>
+                <th className="px-6 py-4 font-display text-sm uppercase tracking-wider text-right">{t("th_fare")}</th>
               </tr>
             </thead>
             <tbody>
@@ -60,7 +58,7 @@ const Pricing = () => {
 
         <div className="mt-6 flex items-start gap-2 text-sm text-muted-foreground bg-brand-yellow/10 border border-brand-yellow/30 rounded-xl p-4">
           <Info className="h-4 w-4 mt-0.5 text-brand-black shrink-0" />
-          <p><span className="font-semibold text-brand-black">Note:</span> Fares are variable based on gas/fuel prices and distance.</p>
+          <p><span className="font-semibold text-brand-black">{t("note")}</span> {t("note_text")}</p>
         </div>
       </div>
     </section>
