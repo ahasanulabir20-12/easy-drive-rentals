@@ -41,14 +41,17 @@ const Contact = () => {
                 <div className="grid sm:grid-cols-2 gap-2">
                   {PHONES.map((p) => (
                     <a
-                      key={p}
-                      href={`tel:+88${p}`}
+                      key={p.num}
+                      href={`tel:+88${p.num}`}
                       className="flex items-center gap-3 rounded-xl border border-border bg-background hover:border-brand-yellow hover:shadow-card transition-smooth p-3"
                     >
-                      <div className="h-10 w-10 rounded-lg bg-brand-yellow text-brand-black grid place-items-center">
+                      <div className="h-10 w-10 rounded-lg bg-brand-yellow text-brand-black grid place-items-center shrink-0">
                         <Phone className="h-4 w-4" />
                       </div>
-                      <span className="font-semibold text-sm">+88 {p}</span>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-sm truncate">{p.name}</div>
+                        <div className="text-xs text-muted-foreground">+88 {p.num}</div>
+                      </div>
                     </a>
                   ))}
                 </div>
