@@ -1,7 +1,18 @@
-import { Phone, Mail, MapPin, Send, MessageCircle } from "lucide-react";
+import { useState } from "react";
+import { Phone, Mail, MapPin, Send, MessageCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLang } from "@/context/LanguageContext";
 import { fleet } from "@/data/fleet";
+import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
+
+const quoteSchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  phone: z.string().trim().min(5).max(30),
+  email: z.string().trim().email().max(255).optional().or(z.literal("")),
+  car: z.string().min(1).max(60),
+  message: z.string().trim().max(1000).optional().or(z.literal("")),
+});
 
 const PHONES: { num: string; name: string }[] = [
   { num: "01965155166", name: "Tanmoy Mahmud" },
@@ -17,11 +28,45 @@ const ADDRESS_BN = "রংমেহার, টংগিবাড়ী, মু�
 const Contact = () => {
   const { toast } = useToast();
   const { t, lang } = useLang();
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const fd = new FormData(form);
+    const parsed = quoteSchema.safeParse({
+      name: String(fd.get("name") || ""),
+      phone: String(fd.get("phone") || ""),
+      email: String(fd.get("email") || ""),
+      car: String(fd.get("car") || fleet[0].name),
+      message: String(fd.get("message") || ""),
+    });
+    if (!parsed.success) {
+      toast({ title: parsed.error.errors[0].message, variant: "destructive" });
+      return;
+    }
+    const data = parsed.data;
+    const carObj = fleet.find((c) => c.name === data.car) ?? fleet[0];
+    setSubmitting(true);
+    const { error } = await supabase.from("bookings").insert({
+      pickup_location: "-",
+      destination: "-",
+      trip_type: "inside",
+      car_key: carObj.key,
+      car_name: carObj.name,
+      customer_name: data.name,
+      customer_phone: data.phone,
+      customer_email: data.email || null,
+      message: data.message || null,
+      source: "contact_form",
+    });
+    setSubmitting(false);
+    if (error) {
+      toast({ title: lang === "bn" ? "পাঠানো যায়নি" : "Could not send", description: error.message, variant: "destructive" });
+      return;
+    }
     toast({ title: t("quote_done"), description: t("quote_done_d") });
-    (e.target as HTMLFormElement).reset();
+    form.reset();
   };
 
   return (
@@ -102,14 +147,14 @@ const Contact = () => {
             <p className="text-sm text-muted-foreground mt-1">{t("quote_sub")}</p>
 
             <div className="mt-6 space-y-4">
-              <Input label={t("full_name")} placeholder="Md. Karim" required maxLength={100} />
+              <Input name="name" label={t("full_name")} placeholder="Md. Karim" required maxLength={100} />
               <div className="grid sm:grid-cols-2 gap-4">
-                <Input label={t("phone")} type="tel" placeholder="+880..." required maxLength={20} />
-                <Input label={t("email")} type="email" placeholder="you@example.com" maxLength={120} />
+                <Input name="phone" label={t("phone")} type="tel" placeholder="+880..." required maxLength={20} />
+                <Input name="email" label={t("email")} type="email" placeholder="you@example.com" maxLength={120} />
               </div>
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("vehicle_needed")}</label>
-                <select className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-3 text-sm outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth">
+                <select name="car" className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-3 text-sm outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth">
                   {fleet.map((c) => (
                     <option key={c.key}>{c.name}</option>
                   ))}
@@ -118,6 +163,7 @@ const Contact = () => {
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("message")}</label>
                 <textarea
+                  name="message"
                   rows={4}
                   maxLength={1000}
                   placeholder={t("msg_ph")}
@@ -127,9 +173,10 @@ const Contact = () => {
 
               <button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-yellow text-brand-black font-semibold py-3.5 hover:bg-brand-black hover:text-brand-yellow transition-smooth"
+                disabled={submitting}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-yellow text-brand-black font-semibold py-3.5 hover:bg-brand-black hover:text-brand-yellow transition-smooth disabled:opacity-60"
               >
-                {t("send_request")} <Send className="h-4 w-4" />
+                {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <>{t("send_request")} <Send className="h-4 w-4" /></>}
               </button>
             </div>
           </form>

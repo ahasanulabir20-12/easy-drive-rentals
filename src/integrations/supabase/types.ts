@@ -14,7 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          car_key: string
+          car_name: string
+          created_at: string
+          customer_email: string | null
+          customer_name: string
+          customer_phone: string
+          destination: string
+          distance_km: number | null
+          estimate_max: number | null
+          estimate_min: number | null
+          id: string
+          message: string | null
+          pickup_location: string
+          source: string
+          status: string
+          trip_date: string | null
+          trip_type: string
+          updated_at: string
+        }
+        Insert: {
+          car_key: string
+          car_name: string
+          created_at?: string
+          customer_email?: string | null
+          customer_name: string
+          customer_phone: string
+          destination: string
+          distance_km?: number | null
+          estimate_max?: number | null
+          estimate_min?: number | null
+          id?: string
+          message?: string | null
+          pickup_location: string
+          source?: string
+          status?: string
+          trip_date?: string | null
+          trip_type?: string
+          updated_at?: string
+        }
+        Update: {
+          car_key?: string
+          car_name?: string
+          created_at?: string
+          customer_email?: string | null
+          customer_name?: string
+          customer_phone?: string
+          destination?: string
+          distance_km?: number | null
+          estimate_max?: number | null
+          estimate_min?: number | null
+          id?: string
+          message?: string | null
+          pickup_location?: string
+          source?: string
+          status?: string
+          trip_date?: string | null
+          trip_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

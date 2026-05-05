@@ -5,6 +5,7 @@ import { districts, distanceKm } from "@/data/districts";
 import { fleet, formatBDT, formatRange, type CarKey } from "@/data/fleet";
 import CarIcon from "@/components/site/CarIcon";
 import { useLang } from "@/context/LanguageContext";
+import BookingModal, { type BookingPayload } from "@/components/site/BookingModal";
 
 const WHATSAPP = "8801709539837";
 const CALL_PHONE = "8801965155166";
@@ -17,6 +18,7 @@ const Hero = () => {
   const [date, setDate] = useState("");
   const [carPickerOpen, setCarPickerOpen] = useState(false);
   const [selectedCar, setSelectedCar] = useState<CarKey>("noah");
+  const [modal, setModal] = useState<null | "whatsapp" | "call">(null);
 
   const car = useMemo(() => fleet.find((c) => c.key === selectedCar)!, [selectedCar]);
 
@@ -185,22 +187,22 @@ const Hero = () => {
                   <div className="text-[11px] text-white/60 mt-1">{t("fare_variable_note")}</div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <a
-                    href={`https://wa.me/${WHATSAPP}?text=${waMessage}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={() => setModal("whatsapp")}
                     className="flex flex-col items-center justify-center rounded-xl bg-[#25D366] text-white px-3 py-2 font-semibold text-sm hover:opacity-90 transition-smooth"
                   >
                     <MessageCircle className="h-4 w-4 mb-1" />
                     {t("book_via_wa")}
-                  </a>
-                  <a
-                    href={`tel:+${CALL_PHONE}`}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setModal("call")}
                     className="flex flex-col items-center justify-center rounded-xl bg-brand-yellow text-brand-black px-3 py-2 font-semibold text-sm hover:bg-brand-black hover:text-brand-yellow transition-smooth"
                   >
                     <Phone className="h-4 w-4 mb-1" />
                     {t("call_to_book")}
-                  </a>
+                  </button>
                 </div>
               </div>
             )}
@@ -215,6 +217,29 @@ const Hero = () => {
           </button>
         </div>
       </div>
+
+      {/* Booking save modal */}
+      {modal && (
+        <BookingModal
+          open={!!modal}
+          onClose={() => setModal(null)}
+          action={modal}
+          whatsappUrl={`https://wa.me/${WHATSAPP}?text=${waMessage}`}
+          callUrl={`tel:+${CALL_PHONE}`}
+          payload={{
+            pickup_location: from || "-",
+            destination: to || "-",
+            trip_date: date || null,
+            trip_type: outside ? "outside" : "inside",
+            car_key: car.key,
+            car_name: car.name,
+            distance_km: km,
+            estimate_min: estimate?.low ?? null,
+            estimate_max: estimate?.high ?? null,
+            source: "hero_widget",
+          } as BookingPayload}
+        />
+      )}
     </section>
   );
 };
