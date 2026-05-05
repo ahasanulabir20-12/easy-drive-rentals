@@ -123,7 +123,7 @@ const Hero = () => {
 
         {/* Results */}
         {searched && (
-          <div id="results" className="mt-8 max-w-5xl bg-white text-brand-black rounded-2xl shadow-card p-5 md:p-6 animate-fade-in">
+          <div id="results" className="mt-8 max-w-5xl bg-white text-brand-black rounded-2xl shadow-card p-5 md:p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Search className="h-4 w-4 text-brand-red" />
