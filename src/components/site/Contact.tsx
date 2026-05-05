@@ -1,7 +1,18 @@
-import { Phone, Mail, MapPin, Send, MessageCircle } from "lucide-react";
+import { useState } from "react";
+import { Phone, Mail, MapPin, Send, MessageCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLang } from "@/context/LanguageContext";
 import { fleet } from "@/data/fleet";
+import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
+
+const quoteSchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  phone: z.string().trim().min(5).max(30),
+  email: z.string().trim().email().max(255).optional().or(z.literal("")),
+  car: z.string().min(1).max(60),
+  message: z.string().trim().max(1000).optional().or(z.literal("")),
+});
 
 const PHONES: { num: string; name: string }[] = [
   { num: "01965155166", name: "Tanmoy Mahmud" },
