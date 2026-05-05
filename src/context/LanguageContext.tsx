@@ -1,0 +1,83 @@
+import { createContext, useContext, useState, ReactNode } from "react";
+
+type Lang = "en" | "bn";
+
+const dict = {
+  en: {
+    nav_fleet: "Fleet", nav_pricing: "Pricing", nav_services: "Services", nav_contact: "Contact",
+    call_now: "Call Now",
+    hero_badge: "Premium Car Rental · All Over Bangladesh",
+    hero_title_1: "Your Premium Ride,", hero_title_accent: "Just a Click", hero_title_2: " Away",
+    hero_sub: "Reliable, comfortable and affordable car rentals across Bangladesh — from Axio to Hiace, Easy_Car has the perfect ride for every journey.",
+    book_ride: "Book Your Ride", inside: "Inside Dhaka", outside: "Outside Dhaka",
+    from: "From", to: "To", date: "Date", search_cars: "Search Cars",
+    pickup_ph: "Type district (e.g. Dha)", dest_ph: "Type district (e.g. Syl)",
+    fleet_kicker: "Our Fleet", fleet_title: "The right ride for every journey.",
+    seats: "Seats", book_now: "Book Now",
+    pricing_kicker: "Transparent Pricing", pricing_title: "Estimated Fare Guide",
+    pricing_sub: "Clear, upfront pricing for every vehicle. No hidden charges.",
+    th_vehicle: "Vehicle Type", th_area: "Service Area", th_fare: "Estimated Base Fare",
+    note: "Note:", note_text: "Fares are variable based on gas/fuel prices and distance.",
+    services_kicker: "What We Offer", services_title: "Service Options Tailored For You",
+    s_daily: "Daily Rental", s_daily_d: "Flexible per-day rentals across the city with chauffeur or self-drive options.",
+    s_air: "Airport Transfer", s_air_d: "Punctual pickups and drop-offs to and from Hazrat Shahjalal International Airport.",
+    s_event: "Event / Wedding", s_event_d: "Decorated cars and microbuses for weddings, ceremonies, and corporate events.",
+    s_em: "Emergency / Hospital", s_em_d: "24/7 urgent patient transport to hospitals — fast, safe, and reliable.",
+    contact_kicker: "Get In Touch", contact_title: "Contact us & request your quote.",
+    contact_sub: "Our team is available 24/7 for bookings, queries, and custom travel plans across Bangladesh.",
+    call_us: "Call Us", whatsapp: "WhatsApp", email: "Email", office: "Office",
+    request_quote: "Request a Quote", quote_sub: "Tell us about your trip — we'll send a tailored quote.",
+    full_name: "Full Name", phone: "Phone", vehicle_needed: "Vehicle Needed",
+    message: "Message", msg_ph: "Trip details, dates, destinations...",
+    send_request: "Send Request", quote_done: "Quote Requested!", quote_done_d: "Our team will contact you within 30 minutes.",
+    available_cars: "Available Cars", no_results: "No cars found for this route. Please contact us.",
+    available: "Available", from_label: "From", to_label: "To",
+  },
+  bn: {
+    nav_fleet: "গাড়ির বহর", nav_pricing: "মূল্য তালিকা", nav_services: "সেবা", nav_contact: "যোগাযোগ",
+    call_now: "এখনই কল করুন",
+    hero_badge: "প্রিমিয়াম কার রেন্টাল · সারা বাংলাদেশে",
+    hero_title_1: "আপনার প্রিমিয়াম রাইড,", hero_title_accent: "এক ক্লিকেই", hero_title_2: " হাজির",
+    hero_sub: "সারা বাংলাদেশে নির্ভরযোগ্য, আরামদায়ক ও সাশ্রয়ী কার রেন্টাল — Axio থেকে Hiace পর্যন্ত, Easy_Car-এ আছে আপনার প্রয়োজনের সব গাড়ি।",
+    book_ride: "আপনার রাইড বুক করুন", inside: "ঢাকার ভিতরে", outside: "ঢাকার বাইরে",
+    from: "কোথা থেকে", to: "কোথায়", date: "তারিখ", search_cars: "গাড়ি খুঁজুন",
+    pickup_ph: "জেলার নাম লিখুন (যেমন ঢা)", dest_ph: "জেলার নাম লিখুন (যেমন সি)",
+    fleet_kicker: "আমাদের গাড়ির বহর", fleet_title: "প্রতিটি যাত্রার জন্য সঠিক গাড়ি।",
+    seats: "সিট", book_now: "এখনই বুক করুন",
+    pricing_kicker: "স্বচ্ছ মূল্য", pricing_title: "আনুমানিক ভাড়ার তালিকা",
+    pricing_sub: "প্রতিটি গাড়ির জন্য স্পষ্ট, পূর্বনির্ধারিত মূল্য। কোনো লুকানো চার্জ নেই।",
+    th_vehicle: "গাড়ির ধরন", th_area: "সেবার এলাকা", th_fare: "আনুমানিক ভাড়া",
+    note: "বিঃদ্রঃ", note_text: "ভাড়া জ্বালানি মূল্য ও দূরত্ব অনুযায়ী পরিবর্তনশীল।",
+    services_kicker: "আমরা যা দিচ্ছি", services_title: "আপনার জন্য বিশেষ সেবা",
+    s_daily: "দৈনিক রেন্টাল", s_daily_d: "শহরজুড়ে দৈনিক ভিত্তিতে চালকসহ বা সেলফ-ড্রাইভ রেন্টাল।",
+    s_air: "এয়ারপোর্ট ট্রান্সফার", s_air_d: "হযরত শাহজালাল আন্তর্জাতিক বিমানবন্দর থেকে সময়মতো পিকআপ ও ড্রপ।",
+    s_event: "ইভেন্ট / বিয়ে", s_event_d: "বিয়ে, অনুষ্ঠান ও কর্পোরেট ইভেন্টের জন্য সাজানো গাড়ি ও মাইক্রোবাস।",
+    s_em: "জরুরি / হাসপাতাল", s_em_d: "২৪/৭ জরুরি রোগী হাসপাতালে নেয়ার সেবা — দ্রুত, নিরাপদ ও নির্ভরযোগ্য।",
+    contact_kicker: "যোগাযোগ করুন", contact_title: "যোগাযোগ করুন ও কোটেশন নিন।",
+    contact_sub: "বুকিং, প্রশ্ন ও কাস্টম ট্রিপ প্ল্যানের জন্য আমাদের টিম ২৪/৭ প্রস্তুত।",
+    call_us: "কল করুন", whatsapp: "হোয়াটসঅ্যাপ", email: "ইমেইল", office: "অফিস",
+    request_quote: "কোটেশন নিন", quote_sub: "আপনার ট্রিপের বিস্তারিত দিন — আমরা ভাড়া পাঠাবো।",
+    full_name: "পুরো নাম", phone: "ফোন", vehicle_needed: "যে গাড়ি লাগবে",
+    message: "বার্তা", msg_ph: "ট্রিপের বিস্তারিত, তারিখ, গন্তব্য...",
+    send_request: "অনুরোধ পাঠান", quote_done: "কোটেশন রিকোয়েস্ট সফল!", quote_done_d: "আমাদের টিম ৩০ মিনিটের মধ্যে যোগাযোগ করবে।",
+    available_cars: "উপলব্ধ গাড়ি", no_results: "এই রুটে কোনো গাড়ি নেই। অনুগ্রহ করে যোগাযোগ করুন।",
+    available: "উপলব্ধ", from_label: "থেকে", to_label: "যাচ্ছে",
+  },
+};
+
+type Dict = typeof dict.en;
+type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (k: keyof Dict) => string };
+
+const LanguageContext = createContext<Ctx | null>(null);
+
+export const LanguageProvider = ({ children }: { children: ReactNode }) => {
+  const [lang, setLang] = useState<Lang>("en");
+  const t = (k: keyof Dict) => dict[lang][k];
+  return <LanguageContext.Provider value={{ lang, setLang, t }}>{children}</LanguageContext.Provider>;
+};
+
+export const useLang = () => {
+  const c = useContext(LanguageContext);
+  if (!c) throw new Error("useLang must be inside LanguageProvider");
+  return c;
+};
