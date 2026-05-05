@@ -18,6 +18,7 @@ const Hero = () => {
   const [date, setDate] = useState("");
   const [carPickerOpen, setCarPickerOpen] = useState(false);
   const [selectedCar, setSelectedCar] = useState<CarKey>("noah");
+  const [modal, setModal] = useState<null | "whatsapp" | "call">(null);
 
   const car = useMemo(() => fleet.find((c) => c.key === selectedCar)!, [selectedCar]);
 
