@@ -16,7 +16,7 @@ const Hero = () => {
         <div className="max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full bg-brand-yellow/15 border border-brand-yellow/30 px-4 py-1.5 text-xs font-semibold text-brand-yellow uppercase tracking-wider">
             <span className="h-1.5 w-1.5 rounded-full bg-brand-yellow animate-pulse" />
-            Premium Car Rental · Dhaka
+            Premium Car Rental · All Over Bangladesh
           </span>
           <h1 className="mt-6 font-display font-bold text-4xl sm:text-5xl lg:text-7xl leading-[1.05] text-balance">
             Your Premium Ride,{" "}
