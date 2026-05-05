@@ -3,7 +3,12 @@ import { useToast } from "@/hooks/use-toast";
 import { useLang } from "@/context/LanguageContext";
 import { fleet } from "@/data/fleet";
 
-const PHONES = ["01965155166", "01913156741", "01940142297"];
+const PHONES: { num: string; name: string }[] = [
+  { num: "01965155166", name: "Tanmoy Mahmud" },
+  { num: "01913156741", name: "Ahasanul Haque" },
+  { num: "01940142297", name: "Aminul Haque" },
+];
+const WHATSAPP_NAME = "Aminul Haque";
 const WHATSAPP = "01709539837";
 const EMAIL = "ahasanulhaqueabir2012@gmail.com";
 const ADDRESS_EN = "Rongmehar, Tongibari, Munshiganj";
@@ -36,14 +41,17 @@ const Contact = () => {
                 <div className="grid sm:grid-cols-2 gap-2">
                   {PHONES.map((p) => (
                     <a
-                      key={p}
-                      href={`tel:+88${p}`}
+                      key={p.num}
+                      href={`tel:+88${p.num}`}
                       className="flex items-center gap-3 rounded-xl border border-border bg-background hover:border-brand-yellow hover:shadow-card transition-smooth p-3"
                     >
-                      <div className="h-10 w-10 rounded-lg bg-brand-yellow text-brand-black grid place-items-center">
+                      <div className="h-10 w-10 rounded-lg bg-brand-yellow text-brand-black grid place-items-center shrink-0">
                         <Phone className="h-4 w-4" />
                       </div>
-                      <span className="font-semibold text-sm">+88 {p}</span>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-sm truncate">{p.name}</div>
+                        <div className="text-xs text-muted-foreground">+88 {p.num}</div>
+                      </div>
                     </a>
                   ))}
                 </div>
@@ -59,7 +67,7 @@ const Contact = () => {
                   <MessageCircle className="h-5 w-5" />
                 </div>
                 <div>
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{t("whatsapp")}</div>
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{t("whatsapp")} · {WHATSAPP_NAME}</div>
                   <div className="font-semibold">+88 {WHATSAPP}</div>
                 </div>
               </a>
