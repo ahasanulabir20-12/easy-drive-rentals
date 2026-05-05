@@ -67,7 +67,7 @@ const Contact = () => {
                   <MessageCircle className="h-5 w-5" />
                 </div>
                 <div>
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{t("whatsapp")}</div>
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{t("whatsapp")} · {WHATSAPP_NAME}</div>
                   <div className="font-semibold">+88 {WHATSAPP}</div>
                 </div>
               </a>
