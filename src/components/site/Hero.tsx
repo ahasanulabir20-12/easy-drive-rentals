@@ -5,6 +5,7 @@ import { districts, distanceKm } from "@/data/districts";
 import { fleet, formatBDT, formatRange, type CarKey } from "@/data/fleet";
 import CarIcon from "@/components/site/CarIcon";
 import { useLang } from "@/context/LanguageContext";
+import BookingModal, { type BookingPayload } from "@/components/site/BookingModal";
 
 const WHATSAPP = "8801709539837";
 const CALL_PHONE = "8801965155166";
