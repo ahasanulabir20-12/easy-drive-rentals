@@ -147,14 +147,14 @@ const Contact = () => {
             <p className="text-sm text-muted-foreground mt-1">{t("quote_sub")}</p>
 
             <div className="mt-6 space-y-4">
-              <Input label={t("full_name")} placeholder="Md. Karim" required maxLength={100} />
+              <Input name="name" label={t("full_name")} placeholder="Md. Karim" required maxLength={100} />
               <div className="grid sm:grid-cols-2 gap-4">
-                <Input label={t("phone")} type="tel" placeholder="+880..." required maxLength={20} />
-                <Input label={t("email")} type="email" placeholder="you@example.com" maxLength={120} />
+                <Input name="phone" label={t("phone")} type="tel" placeholder="+880..." required maxLength={20} />
+                <Input name="email" label={t("email")} type="email" placeholder="you@example.com" maxLength={120} />
               </div>
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("vehicle_needed")}</label>
-                <select className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-3 text-sm outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth">
+                <select name="car" className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-3 text-sm outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth">
                   {fleet.map((c) => (
                     <option key={c.key}>{c.name}</option>
                   ))}
@@ -163,6 +163,7 @@ const Contact = () => {
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("message")}</label>
                 <textarea
+                  name="message"
                   rows={4}
                   maxLength={1000}
                   placeholder={t("msg_ph")}
@@ -172,9 +173,10 @@ const Contact = () => {
 
               <button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-yellow text-brand-black font-semibold py-3.5 hover:bg-brand-black hover:text-brand-yellow transition-smooth"
+                disabled={submitting}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-yellow text-brand-black font-semibold py-3.5 hover:bg-brand-black hover:text-brand-yellow transition-smooth disabled:opacity-60"
               >
-                {t("send_request")} <Send className="h-4 w-4" />
+                {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <>{t("send_request")} <Send className="h-4 w-4" /></>}
               </button>
             </div>
           </form>
