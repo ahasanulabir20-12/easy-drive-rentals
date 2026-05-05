@@ -1,14 +1,9 @@
 import { Info } from "lucide-react";
-import { fleet } from "@/data/fleet";
+import { fleet, formatRange } from "@/data/fleet";
 import { useLang } from "@/context/LanguageContext";
 
 const Pricing = () => {
   const { t, lang } = useLang();
-  const rows = fleet.map((c) => ({
-    vehicle: c.name,
-    area: lang === "bn" ? c.area.bn : c.area.en,
-    fare: c.fare,
-  }));
 
   return (
     <section id="pricing" className="py-20 md:py-28 bg-background">
@@ -27,31 +22,52 @@ const Pricing = () => {
             <thead className="bg-brand-black text-white">
               <tr>
                 <th className="px-6 py-4 font-display text-sm uppercase tracking-wider">{t("th_vehicle")}</th>
-                <th className="px-6 py-4 font-display text-sm uppercase tracking-wider">{t("th_area")}</th>
-                <th className="px-6 py-4 font-display text-sm uppercase tracking-wider text-right">{t("th_fare")}</th>
+                <th className="px-6 py-4 font-display text-sm uppercase tracking-wider">{t("th_inside")}</th>
+                <th className="px-6 py-4 font-display text-sm uppercase tracking-wider">{t("th_outside")}</th>
+                <th className="px-6 py-4 font-display text-sm uppercase tracking-wider text-right">{t("th_perkm")}</th>
               </tr>
             </thead>
             <tbody>
-              {rows.map((r, i) => (
-                <tr key={r.vehicle} className={`${i % 2 === 0 ? "bg-background" : "bg-muted/40"} hover:bg-brand-yellow/10 transition-smooth`}>
-                  <td className="px-6 py-5 font-semibold">{r.vehicle}</td>
-                  <td className="px-6 py-5 text-muted-foreground">{r.area}</td>
-                  <td className="px-6 py-5 text-right font-display font-bold text-lg">{r.fare}</td>
+              {fleet.map((c, i) => (
+                <tr key={c.key} className={`${i % 2 === 0 ? "bg-background" : "bg-muted/40"} hover:bg-brand-yellow/10 transition-smooth`}>
+                  <td className="px-6 py-4">
+                    <div className="font-semibold">{c.name}</div>
+                    <div className="text-xs text-muted-foreground">{lang === "bn" ? c.type.bn : c.type.en} · {c.seats} {t("seats")}</div>
+                  </td>
+                  <td className="px-6 py-4 font-display font-semibold">{formatRange(c.inside.min, c.inside.max)}</td>
+                  <td className="px-6 py-4 font-display font-semibold">{formatRange(c.outside.min, c.outside.max)}</td>
+                  <td className="px-6 py-4 text-right font-display font-bold text-brand-red">৳{c.perKm}/km</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          <div className="px-6 py-3 text-xs text-muted-foreground bg-muted/30 border-t border-border">
+            {t("fare_variable_note")}
+          </div>
         </div>
 
         {/* Mobile cards */}
         <div className="mt-10 grid gap-3 md:hidden">
-          {rows.map((r) => (
-            <div key={r.vehicle} className="rounded-xl border border-border p-4 bg-background shadow-sm">
+          {fleet.map((c) => (
+            <div key={c.key} className="rounded-xl border border-border p-4 bg-background shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="font-display font-semibold text-lg">{r.vehicle}</span>
-                <span className="font-display font-bold text-brand-black">{r.fare}</span>
+                <div>
+                  <div className="font-display font-semibold text-lg">{c.name}</div>
+                  <div className="text-xs text-muted-foreground">{lang === "bn" ? c.type.bn : c.type.en} · {c.seats} {t("seats")}</div>
+                </div>
+                <span className="font-display font-bold text-brand-red">৳{c.perKm}/km</span>
               </div>
-              <p className="mt-1 text-sm text-muted-foreground">{r.area}</p>
+              <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                <div className="rounded-lg bg-muted/40 p-2">
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{t("th_inside")}</div>
+                  <div className="font-semibold">{formatRange(c.inside.min, c.inside.max)}</div>
+                </div>
+                <div className="rounded-lg bg-muted/40 p-2">
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{t("th_outside")}</div>
+                  <div className="font-semibold">{formatRange(c.outside.min, c.outside.max)}</div>
+                </div>
+              </div>
+              <p className="mt-2 text-[11px] text-muted-foreground">{t("fare_variable_note")}</p>
             </div>
           ))}
         </div>
