@@ -3,7 +3,12 @@ import { useToast } from "@/hooks/use-toast";
 import { useLang } from "@/context/LanguageContext";
 import { fleet } from "@/data/fleet";
 
-const PHONES = ["01965155166", "01913156741", "01940142297"];
+const PHONES: { num: string; name: string }[] = [
+  { num: "01965155166", name: "Tanmoy Mahmud" },
+  { num: "01913156741", name: "Ahasanul Haque" },
+  { num: "01940142297", name: "Aminul Haque" },
+];
+const WHATSAPP_NAME = "Aminul Haque";
 const WHATSAPP = "01709539837";
 const EMAIL = "ahasanulhaqueabir2012@gmail.com";
 const ADDRESS_EN = "Rongmehar, Tongibari, Munshiganj";
