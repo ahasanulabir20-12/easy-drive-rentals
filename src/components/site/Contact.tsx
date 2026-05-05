@@ -28,11 +28,45 @@ const ADDRESS_BN = "রংমেহার, টংগিবাড়ী, মু�
 const Contact = () => {
   const { toast } = useToast();
   const { t, lang } = useLang();
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const fd = new FormData(form);
+    const parsed = quoteSchema.safeParse({
+      name: String(fd.get("name") || ""),
+      phone: String(fd.get("phone") || ""),
+      email: String(fd.get("email") || ""),
+      car: String(fd.get("car") || fleet[0].name),
+      message: String(fd.get("message") || ""),
+    });
+    if (!parsed.success) {
+      toast({ title: parsed.error.errors[0].message, variant: "destructive" });
+      return;
+    }
+    const data = parsed.data;
+    const carObj = fleet.find((c) => c.name === data.car) ?? fleet[0];
+    setSubmitting(true);
+    const { error } = await supabase.from("bookings").insert({
+      pickup_location: "-",
+      destination: "-",
+      trip_type: "inside",
+      car_key: carObj.key,
+      car_name: carObj.name,
+      customer_name: data.name,
+      customer_phone: data.phone,
+      customer_email: data.email || null,
+      message: data.message || null,
+      source: "contact_form",
+    });
+    setSubmitting(false);
+    if (error) {
+      toast({ title: lang === "bn" ? "পাঠানো যায়নি" : "Could not send", description: error.message, variant: "destructive" });
+      return;
+    }
     toast({ title: t("quote_done"), description: t("quote_done_d") });
-    (e.target as HTMLFormElement).reset();
+    form.reset();
   };
 
   return (
