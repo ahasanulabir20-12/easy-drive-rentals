@@ -1,10 +1,13 @@
 import { useMemo, useState } from "react";
-import { MapPin, Calendar, ArrowRight, Search, X } from "lucide-react";
+import { MapPin, Calendar, ArrowRight, Car as CarIconLucide, Phone, MessageCircle } from "lucide-react";
 import heroCar from "@/assets/hero-car.jpg";
-import { districts } from "@/data/districts";
-import { fleet } from "@/data/fleet";
+import { districts, distanceKm } from "@/data/districts";
+import { fleet, formatBDT, formatRange, type CarKey } from "@/data/fleet";
 import CarIcon from "@/components/site/CarIcon";
 import { useLang } from "@/context/LanguageContext";
+
+const WHATSAPP = "8801709539837";
+const CALL_PHONE = "8801965155166";
 
 const Hero = () => {
   const { t, lang } = useLang();
@@ -12,32 +15,43 @@ const Hero = () => {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [date, setDate] = useState("");
-  const [searched, setSearched] = useState<null | { from: string; to: string }>(null);
+  const [carPickerOpen, setCarPickerOpen] = useState(false);
+  const [selectedCar, setSelectedCar] = useState<CarKey>("noah");
 
-  const search = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!from || !to) return;
-    setSearched({ from, to });
-    setTimeout(() => {
-      document.getElementById("results")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 50);
-  };
+  const car = useMemo(() => fleet.find((c) => c.key === selectedCar)!, [selectedCar]);
 
   const matchedFrom = useMemo(
-    () => districts.find((d) => d.en.toLowerCase() === from.toLowerCase() || d.bn === from),
+    () => districts.find((d) => d.en.toLowerCase() === from.toLowerCase() || d.bn === from.trim()),
     [from]
   );
   const matchedTo = useMemo(
-    () => districts.find((d) => d.en.toLowerCase() === to.toLowerCase() || d.bn === to),
+    () => districts.find((d) => d.en.toLowerCase() === to.toLowerCase() || d.bn === to.trim()),
     [to]
   );
 
-  const results = useMemo(() => {
-    if (!searched || !matchedFrom || !matchedTo) return [];
-    return fleet.filter(
-      (c) => c.availableIn.includes(matchedFrom.en) && c.availableIn.includes(matchedTo.en)
-    );
-  }, [searched, matchedFrom, matchedTo]);
+  const km = useMemo(() => {
+    if (!matchedFrom || !matchedTo) return null;
+    if (matchedFrom.en === matchedTo.en) return 0;
+    return distanceKm(matchedFrom, matchedTo);
+  }, [matchedFrom, matchedTo]);
+
+  // Fare estimate
+  const estimate = useMemo(() => {
+    if (km == null) return null;
+    if (!outside) {
+      // Inside Dhaka — daily package range
+      return { label: t("inside_dhaka_daily"), text: formatRange(car.inside.min, car.inside.max), low: car.inside.min, high: car.inside.max };
+    }
+    // Outside Dhaka — km × rate, but bounded by trip range
+    const raw = Math.max(km, 80) * car.perKm;
+    const low = Math.round(raw * 0.9);
+    const high = Math.round(raw * 1.15);
+    return { label: t("est_fare"), text: `${formatBDT(low)} – ${formatBDT(high)}`, low, high };
+  }, [km, outside, car, t]);
+
+  const waMessage = encodeURIComponent(
+    `Hi Easy_Car, I'd like to book a ${car.name}.\nFrom: ${from || "-"}\nTo: ${to || "-"}\nDate: ${date || "-"}\nDistance: ${km != null ? km + " km" : "-"}\nEstimate: ${estimate?.text || "-"}`
+  );
 
   return (
     <section id="home" className="relative bg-gradient-hero text-white overflow-hidden">
@@ -60,11 +74,8 @@ const Hero = () => {
           <p className="mt-6 text-lg text-white/70 max-w-xl">{t("hero_sub")}</p>
         </div>
 
-        {/* Booking Widget */}
-        <form
-          onSubmit={search}
-          className="mt-12 bg-white text-brand-black rounded-2xl shadow-card p-5 md:p-6 max-w-5xl"
-        >
+        {/* Booking Widget — all-in-one */}
+        <div className="mt-12 bg-white text-brand-black rounded-2xl shadow-card p-5 md:p-6 max-w-5xl">
           <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
             <h3 className="font-display font-semibold text-lg">{t("book_ride")}</h3>
             <div className="inline-flex items-center bg-muted rounded-full p-1 text-sm font-medium">
@@ -86,20 +97,8 @@ const Hero = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-            <DistrictField
-              icon={<MapPin className="h-4 w-4" />}
-              label={t("from")}
-              placeholder={t("pickup_ph")}
-              value={from}
-              onChange={setFrom}
-            />
-            <DistrictField
-              icon={<MapPin className="h-4 w-4" />}
-              label={t("to")}
-              placeholder={t("dest_ph")}
-              value={to}
-              onChange={setTo}
-            />
+            <DistrictField icon={<MapPin className="h-4 w-4" />} label={t("from")} placeholder={t("pickup_ph")} value={from} onChange={setFrom} />
+            <DistrictField icon={<MapPin className="h-4 w-4" />} label={t("to")} placeholder={t("dest_ph")} value={to} onChange={setTo} />
             <label className="block">
               <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t("date")}</span>
               <div className="mt-1 flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5 focus-within:border-brand-yellow focus-within:ring-2 focus-within:ring-brand-yellow/20 transition-smooth">
@@ -112,66 +111,150 @@ const Hero = () => {
                 />
               </div>
             </label>
-            <button
-              type="submit"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-yellow text-brand-black font-semibold px-5 py-3 hover:bg-brand-black hover:text-brand-yellow transition-smooth"
-            >
-              {t("search_cars")} <ArrowRight className="h-4 w-4" />
-            </button>
-          </div>
-        </form>
 
-        {/* Results */}
-        {searched && (
-          <div id="results" className="mt-8 max-w-5xl bg-white text-brand-black rounded-2xl shadow-card p-5 md:p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Search className="h-4 w-4 text-brand-red" />
-                <h3 className="font-display font-semibold text-lg">
-                  {t("available_cars")}: {lang === "bn" ? matchedFrom?.bn ?? searched.from : matchedFrom?.en ?? searched.from}
-                  {" → "}
-                  {lang === "bn" ? matchedTo?.bn ?? searched.to : matchedTo?.en ?? searched.to}
-                </h3>
-              </div>
+            {/* Select Car */}
+            <div className="block relative">
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t("select_car")}</span>
               <button
-                onClick={() => setSearched(null)}
-                aria-label="Close results"
-                className="rounded-full p-1.5 hover:bg-muted text-muted-foreground"
+                type="button"
+                onClick={() => setCarPickerOpen((v) => !v)}
+                className="mt-1 w-full flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5 hover:border-brand-yellow transition-smooth"
               >
-                <X className="h-4 w-4" />
+                <CarIcon type={car.key} className="h-6 w-8 text-brand-black shrink-0" />
+                <div className="text-left flex-1 min-w-0">
+                  <div className="text-sm font-semibold truncate">{car.name}</div>
+                  <div className="text-[10px] text-muted-foreground truncate">{lang === "bn" ? car.type.bn : car.type.en}</div>
+                </div>
+                <CarIconLucide className="h-4 w-4 text-muted-foreground" />
               </button>
+              {carPickerOpen && (
+                <div className="absolute z-30 mt-1 right-0 left-0 md:right-0 md:left-auto md:w-[480px] bg-white rounded-2xl border border-border shadow-card p-3">
+                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">{t("choose_car")}</div>
+                  <div className="grid grid-cols-2 gap-2 max-h-80 overflow-auto">
+                    {fleet.map((c) => {
+                      const active = c.key === car.key;
+                      return (
+                        <button
+                          key={c.key}
+                          type="button"
+                          onClick={() => { setSelectedCar(c.key); setCarPickerOpen(false); }}
+                          className={`flex items-center gap-3 p-3 rounded-xl border transition-smooth text-left ${active ? "border-brand-yellow bg-brand-yellow/10" : "border-border hover:border-brand-yellow/60 hover:bg-muted/40"}`}
+                        >
+                          <CarIcon type={c.key} className="h-8 w-10 text-brand-black shrink-0" />
+                          <div className="min-w-0">
+                            <div className="font-semibold text-sm truncate">{c.name}</div>
+                            <div className="text-[10px] text-muted-foreground truncate">{c.seats} {t("seats")} · ৳{c.perKm}/km</div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Trip estimate / route preview */}
+          <div className="mt-5 rounded-2xl border border-dashed border-border bg-muted/20 p-4">
+            <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <h4 className="font-display font-semibold text-sm uppercase tracking-wider text-brand-black">{t("route_preview")}</h4>
+              {km != null && (
+                <span className="text-xs font-semibold text-brand-red bg-brand-red/10 rounded-full px-3 py-1">
+                  {t("distance")}: {km} km
+                </span>
+              )}
             </div>
 
-            {results.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-6 text-center">{t("no_results")}</p>
+            {!matchedFrom || !matchedTo ? (
+              <p className="text-sm text-muted-foreground py-6 text-center">{t("pick_route")}</p>
             ) : (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {results.map((car) => (
+              <RoutePreview
+                fromLabel={lang === "bn" ? matchedFrom.bn : matchedFrom.en}
+                toLabel={lang === "bn" ? matchedTo.bn : matchedTo.en}
+                km={km!}
+                perKm={car.perKm}
+                outside={outside}
+              />
+            )}
+
+            {estimate && (
+              <div className="mt-4 grid sm:grid-cols-2 gap-3">
+                <div className="rounded-xl bg-brand-black text-white p-4">
+                  <div className="text-[10px] uppercase tracking-wider text-brand-yellow">{estimate.label}</div>
+                  <div className="mt-1 font-display font-bold text-2xl">{estimate.text}</div>
+                  <div className="text-[11px] text-white/60 mt-1">{t("fare_variable_note")}</div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
                   <a
-                    key={car.key}
-                    href="#contact"
-                    className="rounded-xl border border-border p-4 hover:border-brand-yellow hover:shadow-card transition-smooth group"
+                    href={`https://wa.me/${WHATSAPP}?text=${waMessage}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center justify-center rounded-xl bg-[#25D366] text-white px-3 py-2 font-semibold text-sm hover:opacity-90 transition-smooth"
                   >
-                    <div className="flex items-center justify-between">
-                      <CarIcon type={car.key} className="h-10 w-12 text-brand-black group-hover:text-brand-red transition-smooth" />
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                        ● {t("available")}
-                      </span>
-                    </div>
-                    <h4 className="mt-3 font-display font-bold text-xl">{car.name}</h4>
-                    <p className="text-xs text-muted-foreground">{lang === "bn" ? car.type.bn : car.type.en} · {car.seats} {t("seats")}</p>
-                    <p className="mt-2 text-sm font-bold text-brand-red">{car.fare}</p>
+                    <MessageCircle className="h-4 w-4 mb-1" />
+                    {t("book_via_wa")}
                   </a>
-                ))}
+                  <a
+                    href={`tel:+${CALL_PHONE}`}
+                    className="flex flex-col items-center justify-center rounded-xl bg-brand-yellow text-brand-black px-3 py-2 font-semibold text-sm hover:bg-brand-black hover:text-brand-yellow transition-smooth"
+                  >
+                    <Phone className="h-4 w-4 mb-1" />
+                    {t("call_to_book")}
+                  </a>
+                </div>
               </div>
             )}
           </div>
-        )}
+
+          <button
+            type="button"
+            onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
+            className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-brand-black text-white font-semibold px-5 py-3 hover:bg-brand-yellow hover:text-brand-black transition-smooth"
+          >
+            {t("search_cars")} <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
       </div>
     </section>
   );
 };
 
+/* ---------- Route Preview (curved SVG line w/ midpoint km marker) ---------- */
+const RoutePreview = ({ fromLabel, toLabel, km, perKm, outside }: { fromLabel: string; toLabel: string; km: number; perKm: number; outside: boolean }) => {
+  const W = 600, H = 140;
+  // Curved path from left to right
+  const d = `M 40 ${H - 30} C ${W * 0.3} 20, ${W * 0.6} ${H - 10}, ${W - 40} 30`;
+  const midX = W / 2;
+  const midY = H / 2 + 5;
+  return (
+    <div className="w-full">
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-32">
+        {/* dashed road */}
+        <path d={d} fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="2" strokeDasharray="6 6" opacity="0.5" />
+        {/* solid yellow overlay */}
+        <path d={d} fill="none" stroke="#FFD700" strokeWidth="3" strokeLinecap="round" />
+        {/* From pin */}
+        <circle cx="40" cy={H - 30} r="8" fill="#18181B" />
+        <circle cx="40" cy={H - 30} r="3" fill="#FFD700" />
+        <text x="40" y={H - 8} textAnchor="middle" className="fill-[#18181B]" fontSize="11" fontWeight="700">{fromLabel}</text>
+        {/* To pin */}
+        <circle cx={W - 40} cy="30" r="8" fill="#E11D48" />
+        <circle cx={W - 40} cy="30" r="3" fill="#fff" />
+        <text x={W - 40} y="55" textAnchor="middle" className="fill-[#18181B]" fontSize="11" fontWeight="700">{toLabel}</text>
+        {/* Midpoint km marker */}
+        <g transform={`translate(${midX} ${midY})`}>
+          <rect x="-38" y="-14" width="76" height="28" rx="14" fill="#18181B" />
+          <text x="0" y="5" textAnchor="middle" fill="#FFD700" fontSize="13" fontWeight="800">{km} km</text>
+        </g>
+      </svg>
+      <div className="text-[11px] text-muted-foreground text-center mt-1">
+        {outside ? <>≈ {km} km × ৳{perKm}/km</> : <>{km} km route preview</>}
+      </div>
+    </div>
+  );
+};
+
+/* ---------- District autocomplete field ---------- */
 const DistrictField = ({
   icon, label, placeholder, value, onChange,
 }: {
