@@ -18,10 +18,11 @@ const Fleet = () => {
         </div>
 
         <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {fleet.map((car) => (
+          {fleet.map((car, i) => (
             <article
               key={car.key}
-              className="group rounded-2xl bg-background border border-border p-6 hover:border-brand-yellow hover:-translate-y-1 transition-smooth shadow-sm hover:shadow-card"
+              style={{ animationDelay: `${i * 80}ms` }}
+              className="group animate-fade-in rounded-2xl bg-background border border-border p-6 hover:border-brand-yellow hover:-translate-y-2 transition-smooth shadow-sm hover:shadow-card"
             >
               <div className="flex items-center justify-between">
                 <span className="inline-flex items-center rounded-full bg-brand-black text-brand-yellow px-3 py-1 text-xs font-semibold uppercase tracking-wider">
@@ -31,8 +32,8 @@ const Fleet = () => {
               </div>
 
               <div className="mt-5 flex items-center gap-3">
-                <CarIcon type={car.key} className="h-10 w-12 text-brand-red" />
-                <h3 className="font-display font-bold text-3xl">{car.name}</h3>
+                <CarIcon type={car.key} className="h-10 w-12 text-brand-red group-hover:scale-110 group-hover:-translate-y-0.5 transition-smooth" />
+                <h3 className="font-display font-bold text-4xl">{car.name}</h3>
               </div>
 
               <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
