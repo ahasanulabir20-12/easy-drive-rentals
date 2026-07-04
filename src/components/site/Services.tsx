@@ -21,14 +21,15 @@ const Services = () => {
         </div>
 
         <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((s) => (
+          {services.map((s, i) => (
             <div
               key={s.title}
-              className="relative overflow-hidden rounded-2xl bg-brand-black text-white p-7 hover:shadow-yellow transition-smooth group"
+              style={{ animationDelay: `${i * 100}ms` }}
+              className="relative overflow-hidden rounded-2xl bg-brand-black text-white p-7 hover:shadow-yellow hover:-translate-y-1 transition-smooth group animate-scale-in"
             >
               <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-brand-yellow/20 blur-2xl group-hover:bg-brand-yellow/40 transition-smooth" />
               <div className="relative">
-                <div className="h-12 w-12 rounded-xl bg-brand-yellow text-brand-black grid place-items-center">
+                <div className="h-12 w-12 rounded-xl bg-brand-yellow text-brand-black grid place-items-center group-hover:rotate-6 group-hover:scale-110 transition-smooth">
                   <s.icon className="h-6 w-6" />
                 </div>
                 <h3 className="mt-5 font-display font-bold text-xl">{s.title}</h3>
