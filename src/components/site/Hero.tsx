@@ -245,6 +245,7 @@ const Hero = () => {
             pickup_location: from || "-",
             destination: to || "-",
             trip_date: date || null,
+            pickup_time: time || null,
             trip_type: outside ? "outside" : "inside",
             car_key: car.key,
             car_name: car.name,
