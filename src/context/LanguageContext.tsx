@@ -4,15 +4,15 @@ type Lang = "en" | "bn";
 
 const dict = {
   en: {
-    nav_fleet: "Fleet", nav_pricing: "Pricing", nav_services: "Services", nav_contact: "Contact",
+    nav_fleet: "Cars", nav_pricing: "Pricing", nav_services: "Services", nav_contact: "Contact",
     call_now: "Call Now",
     hero_badge: "Premium Car Rental · All Over Bangladesh",
     hero_title_1: "Your Premium Ride,", hero_title_accent: "Just a Click", hero_title_2: " Away",
     hero_sub: "Reliable, comfortable and affordable car rentals across Bangladesh — from Axio to Hiace, Easy_Car has the perfect ride for every journey.",
     book_ride: "Book Your Ride", inside: "Inside Dhaka", outside: "Outside Dhaka",
-    from: "From", to: "To", date: "Date", search_cars: "Search Cars",
-    pickup_ph: "Type district (e.g. Dha)", dest_ph: "Type district (e.g. Syl)",
-    fleet_kicker: "Our Fleet", fleet_title: "The right ride for every journey.",
+    from: "From", to: "To", date: "Date", pickup_time: "Pickup Time", search_cars: "Search Cars",
+    pickup_ph: "Type area (e.g. Mir)", dest_ph: "Type area (e.g. Uttara)",
+    fleet_kicker: "Our Cars", fleet_title: "The right ride for every journey.",
     seats: "Seats", book_now: "Book Now",
     pricing_kicker: "Transparent Pricing", pricing_title: "Estimated Fare Guide",
     pricing_sub: "Clear, upfront pricing for every vehicle. Fares are estimates — final price may vary by location, fuel cost, distance, and time.",
