@@ -29,6 +29,7 @@ export type Database = {
           id: string
           message: string | null
           pickup_location: string
+          pickup_time: string | null
           source: string
           status: string
           trip_date: string | null
@@ -49,6 +50,7 @@ export type Database = {
           id?: string
           message?: string | null
           pickup_location: string
+          pickup_time?: string | null
           source?: string
           status?: string
           trip_date?: string | null
@@ -69,6 +71,7 @@ export type Database = {
           id?: string
           message?: string | null
           pickup_location?: string
+          pickup_time?: string | null
           source?: string
           status?: string
           trip_date?: string | null
