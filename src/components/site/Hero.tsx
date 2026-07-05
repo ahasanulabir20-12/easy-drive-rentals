@@ -114,6 +114,20 @@ const Hero = () => {
                 />
               </div>
             </label>
+            <label className="block">
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t("pickup_time")}</span>
+              <div className="mt-1 flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5 focus-within:border-brand-yellow focus-within:ring-2 focus-within:ring-brand-yellow/20 transition-smooth">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <input
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  className="w-full bg-transparent outline-none text-sm placeholder:text-muted-foreground"
+                />
+              </div>
+            </label>
+
+
 
             {/* Select Car */}
             <div className="block relative">
