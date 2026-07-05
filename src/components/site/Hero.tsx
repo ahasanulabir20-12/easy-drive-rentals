@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { MapPin, Calendar, ArrowRight, Car as CarIconLucide, Phone, MessageCircle } from "lucide-react";
+import { MapPin, Calendar, Clock, ArrowRight, Car as CarIconLucide, Phone, MessageCircle } from "lucide-react";
 import heroCar from "@/assets/hero-car.jpg";
 import { districts, distanceKm } from "@/data/districts";
 import { fleet, formatBDT, formatRange, type CarKey } from "@/data/fleet";
@@ -16,6 +16,7 @@ const Hero = () => {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
   const [carPickerOpen, setCarPickerOpen] = useState(false);
   const [selectedCar, setSelectedCar] = useState<CarKey>("noah");
   const [modal, setModal] = useState<null | "whatsapp" | "call">(null);
@@ -52,7 +53,7 @@ const Hero = () => {
   }, [km, outside, car, t]);
 
   const waMessage = encodeURIComponent(
-    `Hi Easy_Car, I'd like to book a ${car.name}.\nFrom: ${from || "-"}\nTo: ${to || "-"}\nDate: ${date || "-"}\nDistance: ${km != null ? km + " km" : "-"}\nEstimate: ${estimate?.text || "-"}`
+    `Hi Easy_Car, I'd like to book a ${car.name}.\nFrom: ${from || "-"}\nTo: ${to || "-"}\nDate: ${date || "-"}\nPickup Time: ${time || "-"}\nDistance: ${km != null ? km + " km" : "-"}\nEstimate: ${estimate?.text || "-"}`
   );
 
   return (
@@ -98,7 +99,7 @@ const Hero = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
             <DistrictField icon={<MapPin className="h-4 w-4" />} label={t("from")} placeholder={t("pickup_ph")} value={from} onChange={setFrom} />
             <DistrictField icon={<MapPin className="h-4 w-4" />} label={t("to")} placeholder={t("dest_ph")} value={to} onChange={setTo} />
             <label className="block">
@@ -113,6 +114,20 @@ const Hero = () => {
                 />
               </div>
             </label>
+            <label className="block">
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t("pickup_time")}</span>
+              <div className="mt-1 flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5 focus-within:border-brand-yellow focus-within:ring-2 focus-within:ring-brand-yellow/20 transition-smooth">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <input
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  className="w-full bg-transparent outline-none text-sm placeholder:text-muted-foreground"
+                />
+              </div>
+            </label>
+
+
 
             {/* Select Car */}
             <div className="block relative">
@@ -230,6 +245,7 @@ const Hero = () => {
             pickup_location: from || "-",
             destination: to || "-",
             trip_date: date || null,
+            pickup_time: time || null,
             trip_type: outside ? "outside" : "inside",
             car_key: car.key,
             car_name: car.name,
