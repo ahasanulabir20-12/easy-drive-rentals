@@ -53,7 +53,7 @@ const Hero = () => {
   }, [km, outside, car, t]);
 
   const waMessage = encodeURIComponent(
-    `Hi Easy_Car, I'd like to book a ${car.name}.\nFrom: ${from || "-"}\nTo: ${to || "-"}\nDate: ${date || "-"}\nDistance: ${km != null ? km + " km" : "-"}\nEstimate: ${estimate?.text || "-"}`
+    `Hi Easy_Car, I'd like to book a ${car.name}.\nFrom: ${from || "-"}\nTo: ${to || "-"}\nDate: ${date || "-"}\nPickup Time: ${time || "-"}\nDistance: ${km != null ? km + " km" : "-"}\nEstimate: ${estimate?.text || "-"}`
   );
 
   return (
