@@ -14,6 +14,7 @@ export type BookingPayload = {
   pickup_location: string;
   destination: string;
   trip_date: string | null;
+  pickup_time?: string | null;
   trip_type: "inside" | "outside";
   car_key: string;
   car_name: string;
