@@ -16,6 +16,7 @@ const Hero = () => {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
   const [carPickerOpen, setCarPickerOpen] = useState(false);
   const [selectedCar, setSelectedCar] = useState<CarKey>("noah");
   const [modal, setModal] = useState<null | "whatsapp" | "call">(null);
