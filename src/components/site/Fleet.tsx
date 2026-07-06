@@ -1,4 +1,4 @@
-import { Users, Gauge } from "lucide-react";
+import { Users } from "lucide-react";
 import { fleet } from "@/data/fleet";
 import CarIcon from "@/components/site/CarIcon";
 import { useLang } from "@/context/LanguageContext";
@@ -17,36 +17,29 @@ const Fleet = () => {
           </div>
         </div>
 
-        <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           {fleet.map((car, i) => (
             <article
               key={car.key}
-              style={{ animationDelay: `${i * 80}ms` }}
-              className="group animate-fade-in rounded-2xl bg-background border border-border p-6 hover:border-brand-yellow hover:-translate-y-2 transition-smooth shadow-sm hover:shadow-card"
+              style={{ animationDelay: `${i * 60}ms` }}
+              className="group animate-fade-in liquid-glass liquid-light rounded-2xl p-4 hover:-translate-y-1 transition-smooth"
             >
               <div className="flex items-center justify-between">
-                <span className="inline-flex items-center rounded-full bg-brand-black text-brand-yellow px-3 py-1 text-xs font-semibold uppercase tracking-wider">
+                <span className="inline-flex items-center rounded-full bg-brand-black text-brand-yellow px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider">
                   {lang === "bn" ? car.type.bn : car.type.en}
                 </span>
-                <Gauge className="h-5 w-5 text-muted-foreground group-hover:text-brand-yellow transition-smooth" />
               </div>
-
-              <div className="mt-5 flex items-center gap-3">
-                <CarIcon type={car.key} className="h-10 w-12 text-brand-red group-hover:scale-110 group-hover:-translate-y-0.5 transition-smooth" />
-                <h3 className="font-display font-bold text-4xl">{car.name}</h3>
+              <div className="mt-3 flex items-center gap-2">
+                <CarIcon type={car.key} className="h-7 w-9 text-brand-red group-hover:scale-110 transition-smooth" />
+                <h3 className="font-display font-bold text-xl leading-none">{car.name}</h3>
               </div>
-
-              <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
-                {lang === "bn" ? car.desc.bn : car.desc.en}
-              </p>
-
-              <div className="mt-5 flex items-center gap-4 text-sm text-muted-foreground">
-                <span className="inline-flex items-center gap-1.5"><Users className="h-4 w-4" /> {car.seats} {t("seats")}</span>
+              <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground">
+                <span className="inline-flex items-center gap-1"><Users className="h-3 w-3" /> {car.seats}</span>
+                <span className="font-semibold text-brand-black">৳{car.perKm}/km</span>
               </div>
-
               <a
                 href="#contact"
-                className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-brand-black text-white font-semibold py-3 hover:bg-brand-yellow hover:text-brand-black transition-smooth"
+                className="liquid-glass liquid-dark mt-3 inline-flex w-full items-center justify-center rounded-xl font-semibold py-2 text-xs"
               >
                 {t("book_now")}
               </a>

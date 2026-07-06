@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
-import { MapPin, Calendar, Clock, ArrowRight, Car as CarIconLucide, Phone, MessageCircle } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { MapPin, Calendar, Clock, ArrowRight, Car as CarIconLucide, Phone, MessageCircle, Timer } from "lucide-react";
 import heroCar from "@/assets/hero-car.jpg";
-import { districts, distanceKm } from "@/data/districts";
+import { districts, distanceKm, isInsideDhakaDivision, estimateMinutes, formatDuration } from "@/data/districts";
 import { fleet, formatBDT, formatRange, type CarKey } from "@/data/fleet";
 import CarIcon from "@/components/site/CarIcon";
 import { useLang } from "@/context/LanguageContext";
@@ -13,6 +13,7 @@ const CALL_PHONE = "8801965155166";
 const Hero = () => {
   const { t, lang } = useLang();
   const [outside, setOutside] = useState(false);
+  const [autoSwitched, setAutoSwitched] = useState(false);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [date, setDate] = useState("");
@@ -38,17 +39,33 @@ const Hero = () => {
     return distanceKm(matchedFrom, matchedTo);
   }, [matchedFrom, matchedTo]);
 
+  // Auto-switch Inside/Outside Dhaka based on selected locations (Dhaka Division = inside)
+  useEffect(() => {
+    if (!matchedFrom || !matchedTo) { setAutoSwitched(false); return; }
+    const bothInside = isInsideDhakaDivision(matchedFrom.en) && isInsideDhakaDivision(matchedTo.en);
+    const shouldOutside = !bothInside;
+    if (shouldOutside !== outside) {
+      setOutside(shouldOutside);
+      setAutoSwitched(true);
+    } else {
+      setAutoSwitched(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matchedFrom, matchedTo]);
+
+  // Estimated time based on km + trip type
+  const minutes = useMemo(() => (km != null && km > 0 ? estimateMinutes(km, outside) : null), [km, outside]);
+
   // Fare estimate
   const estimate = useMemo(() => {
     if (km == null) return null;
     if (!outside) {
-      // Inside Dhaka — daily package range
       return { label: t("inside_dhaka_daily"), text: formatRange(car.inside.min, car.inside.max), low: car.inside.min, high: car.inside.max };
     }
-    // Outside Dhaka — km × rate, but bounded by trip range
     const raw = Math.max(km, 80) * car.perKm;
-    const low = Math.round(raw * 0.9);
-    const high = Math.round(raw * 1.15);
+    // ±~1500 BDT window around the raw estimate for a real-life quote feel
+    const low = Math.max(1500, Math.round(raw - 1500));
+    const high = Math.round(raw + 1500);
     return { label: t("est_fare"), text: `${formatBDT(low)} – ${formatBDT(high)}`, low, high };
   }, [km, outside, car, t]);
 
@@ -81,21 +98,28 @@ const Hero = () => {
         <div className="mt-12 bg-white text-brand-black rounded-2xl shadow-card p-5 md:p-6 max-w-5xl reveal reveal-delay-3">
           <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
             <h3 className="font-display font-semibold text-lg">{t("book_ride")}</h3>
-            <div className="inline-flex items-center bg-muted rounded-full p-1 text-sm font-medium">
-              <button
-                type="button"
-                onClick={() => setOutside(false)}
-                className={`px-4 py-1.5 rounded-full transition-smooth ${!outside ? "bg-brand-black text-white" : "text-muted-foreground"}`}
-              >
-                {t("inside")}
-              </button>
-              <button
-                type="button"
-                onClick={() => setOutside(true)}
-                className={`px-4 py-1.5 rounded-full transition-smooth ${outside ? "bg-brand-yellow text-brand-black" : "text-muted-foreground"}`}
-              >
-                {t("outside")}
-              </button>
+            <div className="flex items-center gap-2 flex-wrap">
+              {autoSwitched && (
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-brand-red bg-brand-red/10 rounded-full px-2 py-1">
+                  {t("auto_switched")}
+                </span>
+              )}
+              <div className="liquid-glass liquid-light inline-flex items-center rounded-full p-1 text-sm font-semibold">
+                <button
+                  type="button"
+                  onClick={() => { setOutside(false); setAutoSwitched(false); }}
+                  className={`px-4 py-1.5 rounded-full transition-smooth ${!outside ? "liquid-glass liquid-dark shadow-sm" : "text-muted-foreground"}`}
+                >
+                  {t("inside")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setOutside(true); setAutoSwitched(false); }}
+                  className={`px-4 py-1.5 rounded-full transition-smooth ${outside ? "liquid-glass liquid-gold shadow-sm" : "text-muted-foreground"}`}
+                >
+                  {t("outside")}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -175,11 +199,18 @@ const Hero = () => {
           <div className="mt-5 rounded-2xl border border-dashed border-border bg-muted/20 p-4">
             <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
               <h4 className="font-display font-semibold text-sm uppercase tracking-wider text-brand-black">{t("route_preview")}</h4>
-              {km != null && (
-                <span className="text-xs font-semibold text-brand-red bg-brand-red/10 rounded-full px-3 py-1">
-                  {t("distance")}: {km} km
-                </span>
-              )}
+              <div className="flex items-center gap-2 flex-wrap">
+                {km != null && (
+                  <span className="text-xs font-semibold text-brand-red bg-brand-red/10 rounded-full px-3 py-1">
+                    {t("distance")}: {km} km
+                  </span>
+                )}
+                {minutes != null && (
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand-black bg-brand-yellow/25 rounded-full px-3 py-1">
+                    <Timer className="h-3 w-3" /> {t("est_time")}: {formatDuration(minutes)}
+                  </span>
+                )}
+              </div>
             </div>
 
             {!matchedFrom || !matchedTo ? (
@@ -189,6 +220,7 @@ const Hero = () => {
                 fromLabel={lang === "bn" ? matchedFrom.bn : matchedFrom.en}
                 toLabel={lang === "bn" ? matchedTo.bn : matchedTo.en}
                 km={km!}
+                minutes={minutes}
                 perKm={car.perKm}
                 outside={outside}
               />
@@ -196,16 +228,16 @@ const Hero = () => {
 
             {estimate && (
               <div className="mt-4 grid sm:grid-cols-2 gap-3">
-                <div className="rounded-xl bg-brand-black text-white p-4">
+                <div className="liquid-glass liquid-dark rounded-2xl p-4">
                   <div className="text-[10px] uppercase tracking-wider text-brand-yellow">{estimate.label}</div>
-                  <div className="mt-1 font-display font-bold text-2xl">{estimate.text}</div>
+                  <div className="mt-1 font-display font-bold text-2xl text-white">{estimate.text}</div>
                   <div className="text-[11px] text-white/60 mt-1">{t("fare_variable_note")}</div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setModal("whatsapp")}
-                    className="flex flex-col items-center justify-center rounded-xl bg-[#25D366] text-white px-3 py-2 font-semibold text-sm hover:opacity-90 transition-smooth"
+                    className="liquid-glass liquid-green flex flex-col items-center justify-center rounded-2xl px-3 py-2 font-semibold text-sm"
                   >
                     <MessageCircle className="h-4 w-4 mb-1" />
                     {t("book_via_wa")}
@@ -213,7 +245,7 @@ const Hero = () => {
                   <button
                     type="button"
                     onClick={() => setModal("call")}
-                    className="flex flex-col items-center justify-center rounded-xl bg-brand-yellow text-brand-black px-3 py-2 font-semibold text-sm hover:bg-brand-black hover:text-brand-yellow transition-smooth"
+                    className="liquid-glass liquid-gold flex flex-col items-center justify-center rounded-2xl px-3 py-2 font-semibold text-sm"
                   >
                     <Phone className="h-4 w-4 mb-1" />
                     {t("call_to_book")}
@@ -226,7 +258,7 @@ const Hero = () => {
           <button
             type="button"
             onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
-            className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-brand-black text-white font-semibold px-5 py-3 hover:bg-brand-yellow hover:text-brand-black transition-smooth"
+            className="liquid-glass liquid-dark mt-4 inline-flex items-center justify-center gap-2 rounded-2xl font-semibold px-5 py-3"
           >
             {t("search_cars")} <ArrowRight className="h-4 w-4" />
           </button>
@@ -261,7 +293,7 @@ const Hero = () => {
 };
 
 /* ---------- Route Preview (curved SVG line w/ midpoint km marker) ---------- */
-const RoutePreview = ({ fromLabel, toLabel, km, perKm, outside }: { fromLabel: string; toLabel: string; km: number; perKm: number; outside: boolean }) => {
+const RoutePreview = ({ fromLabel, toLabel, km, minutes, perKm, outside }: { fromLabel: string; toLabel: string; km: number; minutes: number | null; perKm: number; outside: boolean }) => {
   const W = 600, H = 140;
   // Curved path from left to right
   const d = `M 40 ${H - 30} C ${W * 0.3} 20, ${W * 0.6} ${H - 10}, ${W - 40} 30`;
@@ -289,7 +321,7 @@ const RoutePreview = ({ fromLabel, toLabel, km, perKm, outside }: { fromLabel: s
         </g>
       </svg>
       <div className="text-[11px] text-muted-foreground text-center mt-1">
-        {outside ? <>≈ {km} km × ৳{perKm}/km</> : <>{km} km route preview</>}
+        {outside ? <>≈ {km} km × ৳{perKm}/km{minutes != null && <> · ~{formatDuration(minutes)}</>}</> : <>{km} km route preview{minutes != null && <> · ~{formatDuration(minutes)}</>}</>}
       </div>
     </div>
   );
