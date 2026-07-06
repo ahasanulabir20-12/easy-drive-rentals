@@ -293,7 +293,7 @@ const Hero = () => {
 };
 
 /* ---------- Route Preview (curved SVG line w/ midpoint km marker) ---------- */
-const RoutePreview = ({ fromLabel, toLabel, km, perKm, outside }: { fromLabel: string; toLabel: string; km: number; perKm: number; outside: boolean }) => {
+const RoutePreview = ({ fromLabel, toLabel, km, minutes, perKm, outside }: { fromLabel: string; toLabel: string; km: number; minutes: number | null; perKm: number; outside: boolean }) => {
   const W = 600, H = 140;
   // Curved path from left to right
   const d = `M 40 ${H - 30} C ${W * 0.3} 20, ${W * 0.6} ${H - 10}, ${W - 40} 30`;
@@ -321,7 +321,7 @@ const RoutePreview = ({ fromLabel, toLabel, km, perKm, outside }: { fromLabel: s
         </g>
       </svg>
       <div className="text-[11px] text-muted-foreground text-center mt-1">
-        {outside ? <>≈ {km} km × ৳{perKm}/km</> : <>{km} km route preview</>}
+        {outside ? <>≈ {km} km × ৳{perKm}/km{minutes != null && <> · ~{formatDuration(minutes)}</>}</> : <>{km} km route preview{minutes != null && <> · ~{formatDuration(minutes)}</>}</>}
       </div>
     </div>
   );
