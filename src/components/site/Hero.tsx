@@ -98,21 +98,28 @@ const Hero = () => {
         <div className="mt-12 bg-white text-brand-black rounded-2xl shadow-card p-5 md:p-6 max-w-5xl reveal reveal-delay-3">
           <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
             <h3 className="font-display font-semibold text-lg">{t("book_ride")}</h3>
-            <div className="inline-flex items-center bg-muted rounded-full p-1 text-sm font-medium">
-              <button
-                type="button"
-                onClick={() => setOutside(false)}
-                className={`px-4 py-1.5 rounded-full transition-smooth ${!outside ? "bg-brand-black text-white" : "text-muted-foreground"}`}
-              >
-                {t("inside")}
-              </button>
-              <button
-                type="button"
-                onClick={() => setOutside(true)}
-                className={`px-4 py-1.5 rounded-full transition-smooth ${outside ? "bg-brand-yellow text-brand-black" : "text-muted-foreground"}`}
-              >
-                {t("outside")}
-              </button>
+            <div className="flex items-center gap-2 flex-wrap">
+              {autoSwitched && (
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-brand-red bg-brand-red/10 rounded-full px-2 py-1">
+                  {t("auto_switched")}
+                </span>
+              )}
+              <div className="liquid-glass liquid-light inline-flex items-center rounded-full p-1 text-sm font-semibold">
+                <button
+                  type="button"
+                  onClick={() => { setOutside(false); setAutoSwitched(false); }}
+                  className={`px-4 py-1.5 rounded-full transition-smooth ${!outside ? "liquid-glass liquid-dark shadow-sm" : "text-muted-foreground"}`}
+                >
+                  {t("inside")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setOutside(true); setAutoSwitched(false); }}
+                  className={`px-4 py-1.5 rounded-full transition-smooth ${outside ? "liquid-glass liquid-gold shadow-sm" : "text-muted-foreground"}`}
+                >
+                  {t("outside")}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -192,11 +199,18 @@ const Hero = () => {
           <div className="mt-5 rounded-2xl border border-dashed border-border bg-muted/20 p-4">
             <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
               <h4 className="font-display font-semibold text-sm uppercase tracking-wider text-brand-black">{t("route_preview")}</h4>
-              {km != null && (
-                <span className="text-xs font-semibold text-brand-red bg-brand-red/10 rounded-full px-3 py-1">
-                  {t("distance")}: {km} km
-                </span>
-              )}
+              <div className="flex items-center gap-2 flex-wrap">
+                {km != null && (
+                  <span className="text-xs font-semibold text-brand-red bg-brand-red/10 rounded-full px-3 py-1">
+                    {t("distance")}: {km} km
+                  </span>
+                )}
+                {minutes != null && (
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand-black bg-brand-yellow/25 rounded-full px-3 py-1">
+                    <Timer className="h-3 w-3" /> {t("est_time")}: {formatDuration(minutes)}
+                  </span>
+                )}
+              </div>
             </div>
 
             {!matchedFrom || !matchedTo ? (
@@ -206,6 +220,7 @@ const Hero = () => {
                 fromLabel={lang === "bn" ? matchedFrom.bn : matchedFrom.en}
                 toLabel={lang === "bn" ? matchedTo.bn : matchedTo.en}
                 km={km!}
+                minutes={minutes}
                 perKm={car.perKm}
                 outside={outside}
               />
@@ -213,16 +228,16 @@ const Hero = () => {
 
             {estimate && (
               <div className="mt-4 grid sm:grid-cols-2 gap-3">
-                <div className="rounded-xl bg-brand-black text-white p-4">
+                <div className="liquid-glass liquid-dark rounded-2xl p-4">
                   <div className="text-[10px] uppercase tracking-wider text-brand-yellow">{estimate.label}</div>
-                  <div className="mt-1 font-display font-bold text-2xl">{estimate.text}</div>
+                  <div className="mt-1 font-display font-bold text-2xl text-white">{estimate.text}</div>
                   <div className="text-[11px] text-white/60 mt-1">{t("fare_variable_note")}</div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setModal("whatsapp")}
-                    className="flex flex-col items-center justify-center rounded-xl bg-[#25D366] text-white px-3 py-2 font-semibold text-sm hover:opacity-90 transition-smooth"
+                    className="liquid-glass liquid-green flex flex-col items-center justify-center rounded-2xl px-3 py-2 font-semibold text-sm"
                   >
                     <MessageCircle className="h-4 w-4 mb-1" />
                     {t("book_via_wa")}
@@ -230,7 +245,7 @@ const Hero = () => {
                   <button
                     type="button"
                     onClick={() => setModal("call")}
-                    className="flex flex-col items-center justify-center rounded-xl bg-brand-yellow text-brand-black px-3 py-2 font-semibold text-sm hover:bg-brand-black hover:text-brand-yellow transition-smooth"
+                    className="liquid-glass liquid-gold flex flex-col items-center justify-center rounded-2xl px-3 py-2 font-semibold text-sm"
                   >
                     <Phone className="h-4 w-4 mb-1" />
                     {t("call_to_book")}
@@ -243,7 +258,7 @@ const Hero = () => {
           <button
             type="button"
             onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
-            className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-brand-black text-white font-semibold px-5 py-3 hover:bg-brand-yellow hover:text-brand-black transition-smooth"
+            className="liquid-glass liquid-dark mt-4 inline-flex items-center justify-center gap-2 rounded-2xl font-semibold px-5 py-3"
           >
             {t("search_cars")} <ArrowRight className="h-4 w-4" />
           </button>
