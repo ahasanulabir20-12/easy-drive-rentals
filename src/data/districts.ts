@@ -254,6 +254,27 @@ export const districts: District[] = [
   { en: "Bagerhat Khan Jahan Ali Airport", bn: "বাগেরহাট খান জাহান আলী বিমানবন্দর", lat: 22.7830, lng: 89.8500 },
 ];
 
+// Districts NOT in Dhaka Division (used to auto-switch inside/outside)
+const OUTSIDE_DHAKA_DIVISION = new Set<string>([
+  "Bagerhat","Bandarban","Barguna","Barisal","Bhola","Bogra","Brahmanbaria",
+  "Chandpur","Chapainawabganj","Chattogram","Chuadanga","Cox's Bazar","Cumilla",
+  "Dinajpur","Feni","Gaibandha","Habiganj","Jamalpur","Jessore","Jhalokati",
+  "Jhenaidah","Joypurhat","Khagrachari","Khulna","Kurigram","Kushtia",
+  "Lakshmipur","Lalmonirhat","Magura","Meherpur","Moulvibazar","Mymensingh",
+  "Naogaon","Narail","Natore","Netrokona","Nilphamari","Noakhali","Pabna",
+  "Panchagarh","Patuakhali","Pirojpur","Rajshahi","Rangamati","Rangpur",
+  "Satkhira","Sherpur","Sirajganj","Sunamganj","Sylhet","Thakurgaon",
+  "Shah Amanat International Airport (Chattogram)",
+  "Osmani International Airport (Sylhet)",
+  "Cox's Bazar International Airport",
+  "Saidpur Airport","Shah Makhdum Airport (Rajshahi)","Barishal Airport",
+  "Jashore Airport","Ishurdi Airport","Lalmonirhat Airport",
+  "Shamshernagar Airport","Bagerhat Khan Jahan Ali Airport",
+]);
+
+export const isInsideDhakaDivision = (en?: string | null) =>
+  !!en && !OUTSIDE_DHAKA_DIVISION.has(en);
+
 // Haversine distance in km
 export const distanceKm = (a: District, b: District) => {
   const R = 6371;
@@ -265,6 +286,18 @@ export const distanceKm = (a: District, b: District) => {
   const x =
     Math.sin(dLat / 2) ** 2 +
     Math.sin(dLng / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
-  // Apply 1.25x road factor (roads are not straight lines)
   return Math.round(R * 2 * Math.asin(Math.sqrt(x)) * 1.25);
+};
+
+// Estimated travel time (minutes) — city vs highway average speeds
+export const estimateMinutes = (km: number, outside: boolean) => {
+  const avg = outside ? 55 : 28;
+  return Math.max(5, Math.round((km / avg) * 60));
+};
+
+export const formatDuration = (mins: number) => {
+  if (mins < 60) return `${mins} min`;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return m ? `${h}h ${m}m` : `${h}h`;
 };
