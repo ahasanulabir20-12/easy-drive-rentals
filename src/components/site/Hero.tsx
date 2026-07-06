@@ -39,17 +39,33 @@ const Hero = () => {
     return distanceKm(matchedFrom, matchedTo);
   }, [matchedFrom, matchedTo]);
 
+  // Auto-switch Inside/Outside Dhaka based on selected locations (Dhaka Division = inside)
+  useEffect(() => {
+    if (!matchedFrom || !matchedTo) { setAutoSwitched(false); return; }
+    const bothInside = isInsideDhakaDivision(matchedFrom.en) && isInsideDhakaDivision(matchedTo.en);
+    const shouldOutside = !bothInside;
+    if (shouldOutside !== outside) {
+      setOutside(shouldOutside);
+      setAutoSwitched(true);
+    } else {
+      setAutoSwitched(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matchedFrom, matchedTo]);
+
+  // Estimated time based on km + trip type
+  const minutes = useMemo(() => (km != null && km > 0 ? estimateMinutes(km, outside) : null), [km, outside]);
+
   // Fare estimate
   const estimate = useMemo(() => {
     if (km == null) return null;
     if (!outside) {
-      // Inside Dhaka — daily package range
       return { label: t("inside_dhaka_daily"), text: formatRange(car.inside.min, car.inside.max), low: car.inside.min, high: car.inside.max };
     }
-    // Outside Dhaka — km × rate, but bounded by trip range
     const raw = Math.max(km, 80) * car.perKm;
-    const low = Math.round(raw * 0.9);
-    const high = Math.round(raw * 1.15);
+    // ±~1500 BDT window around the raw estimate for a real-life quote feel
+    const low = Math.max(1500, Math.round(raw - 1500));
+    const high = Math.round(raw + 1500);
     return { label: t("est_fare"), text: `${formatBDT(low)} – ${formatBDT(high)}`, low, high };
   }, [km, outside, car, t]);
 
