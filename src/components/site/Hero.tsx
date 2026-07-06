@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
-import { MapPin, Calendar, Clock, ArrowRight, Car as CarIconLucide, Phone, MessageCircle } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { MapPin, Calendar, Clock, ArrowRight, Car as CarIconLucide, Phone, MessageCircle, Timer } from "lucide-react";
 import heroCar from "@/assets/hero-car.jpg";
-import { districts, distanceKm } from "@/data/districts";
+import { districts, distanceKm, isInsideDhakaDivision, estimateMinutes, formatDuration } from "@/data/districts";
 import { fleet, formatBDT, formatRange, type CarKey } from "@/data/fleet";
 import CarIcon from "@/components/site/CarIcon";
 import { useLang } from "@/context/LanguageContext";
@@ -13,6 +13,7 @@ const CALL_PHONE = "8801965155166";
 const Hero = () => {
   const { t, lang } = useLang();
   const [outside, setOutside] = useState(false);
+  const [autoSwitched, setAutoSwitched] = useState(false);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [date, setDate] = useState("");
