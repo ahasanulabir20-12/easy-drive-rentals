@@ -56,6 +56,17 @@ const Hero = () => {
   // Estimated time based on km + trip type
   const minutes = useMemo(() => (km != null && km > 0 ? estimateMinutes(km, outside) : null), [km, outside]);
 
+  // Approximate wording helpers (never show an exact-looking distance/fare)
+  const approxWord = lang === "bn" ? "আনুমানিক" : "Approx";
+  // Round to a friendly step so the number never reads as an exact measurement
+  const approxKm = useMemo(() => {
+    if (km == null) return null;
+    if (km <= 10) return km;
+    const step = km < 100 ? 5 : 10;
+    return Math.round(km / step) * step;
+  }, [km]);
+  const approxKmText = approxKm == null ? "-" : `≈ ${approxKm} km`;
+
   // Fare estimate
   const estimate = useMemo(() => {
     if (km == null) return null;
@@ -70,8 +81,9 @@ const Hero = () => {
   }, [km, outside, car, t]);
 
   const waMessage = encodeURIComponent(
-    `Hi Easy_Car, I'd like to book a ${car.name}.\nFrom: ${from || "-"}\nTo: ${to || "-"}\nDate: ${date || "-"}\nPickup Time: ${time || "-"}\nDistance: ${km != null ? km + " km" : "-"}\nEstimate: ${estimate?.text || "-"}`
+    `Hi Easy_Car, I'd like to book a ${car.name}.\nFrom: ${from || "-"}\nTo: ${to || "-"}\nDate: ${date || "-"}\nPickup Time: ${time || "-"}\nDistance: ${approxKmText} (approx)\nEstimated Fare: ${estimate?.text || "-"} (approx)`
   );
+
 
   return (
     <section id="home" className="relative bg-gradient-hero text-white overflow-hidden">
