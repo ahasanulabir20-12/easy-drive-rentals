@@ -329,15 +329,16 @@ const RoutePreview = ({ fromLabel, toLabel, km, minutes, perKm, outside, approxW
         <circle cx={W - 40} cy="30" r="8" fill="#E11D48" />
         <circle cx={W - 40} cy="30" r="3" fill="#fff" />
         <text x={W - 40} y="55" textAnchor="middle" className="fill-[#18181B]" fontSize="11" fontWeight="700">{toLabel}</text>
-        {/* Midpoint km marker */}
+        {/* Midpoint km marker (approximate) */}
         <g transform={`translate(${midX} ${midY})`}>
-          <rect x="-38" y="-14" width="76" height="28" rx="14" fill="#18181B" />
-          <text x="0" y="5" textAnchor="middle" fill="#FFD700" fontSize="13" fontWeight="800">{km} km</text>
+          <rect x="-48" y="-14" width="96" height="28" rx="14" fill="#18181B" />
+          <text x="0" y="5" textAnchor="middle" fill="#FFD700" fontSize="13" fontWeight="800">≈ {km} km</text>
         </g>
       </svg>
       <div className="text-[11px] text-muted-foreground text-center mt-1">
-        {outside ? <>≈ {km} km × ৳{perKm}/km{minutes != null && <> · ~{formatDuration(minutes)}</>}</> : <>{km} km route preview{minutes != null && <> · ~{formatDuration(minutes)}</>}</>}
+        {outside ? <>≈ {km} km × ৳{perKm}/km{minutes != null && <> · ~{formatDuration(minutes)}</>} ({approxWord})</> : <>≈ {km} km{minutes != null && <> · ~{formatDuration(minutes)}</>} ({approxWord})</>}
       </div>
+
     </div>
   );
 };
