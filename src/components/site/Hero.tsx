@@ -308,7 +308,7 @@ const Hero = () => {
 };
 
 /* ---------- Route Preview (curved SVG line w/ midpoint km marker) ---------- */
-const RoutePreview = ({ fromLabel, toLabel, km, minutes, perKm, outside }: { fromLabel: string; toLabel: string; km: number; minutes: number | null; perKm: number; outside: boolean }) => {
+const RoutePreview = ({ fromLabel, toLabel, km, minutes, perKm, outside, approxWord }: { fromLabel: string; toLabel: string; km: number; minutes: number | null; perKm: number; outside: boolean; approxWord: string }) => {
   const W = 600, H = 140;
   // Curved path from left to right
   const d = `M 40 ${H - 30} C ${W * 0.3} 20, ${W * 0.6} ${H - 10}, ${W - 40} 30`;
