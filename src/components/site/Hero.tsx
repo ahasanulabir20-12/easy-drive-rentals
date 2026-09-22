@@ -232,20 +232,22 @@ const Hero = () => {
               <RoutePreview
                 fromLabel={lang === "bn" ? matchedFrom.bn : matchedFrom.en}
                 toLabel={lang === "bn" ? matchedTo.bn : matchedTo.en}
-                km={km!}
+                km={approxKm!}
                 minutes={minutes}
                 perKm={car.perKm}
                 outside={outside}
+                approxWord={approxWord}
               />
             )}
 
             {estimate && (
               <div className="mt-4 grid sm:grid-cols-2 gap-3">
                 <div className="liquid-glass liquid-dark rounded-2xl p-4">
-                  <div className="text-[10px] uppercase tracking-wider text-brand-yellow">{estimate.label}</div>
-                  <div className="mt-1 font-display font-bold text-2xl text-white">{estimate.text}</div>
+                  <div className="text-[10px] uppercase tracking-wider text-brand-yellow">{estimate.label} ({approxWord})</div>
+                  <div className="mt-1 font-display font-bold text-2xl text-white">≈ {estimate.text}</div>
                   <div className="text-[11px] text-white/60 mt-1">{t("fare_variable_note")}</div>
                 </div>
+
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
