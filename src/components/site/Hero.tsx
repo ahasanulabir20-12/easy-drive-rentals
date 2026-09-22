@@ -56,6 +56,17 @@ const Hero = () => {
   // Estimated time based on km + trip type
   const minutes = useMemo(() => (km != null && km > 0 ? estimateMinutes(km, outside) : null), [km, outside]);
 
+  // Approximate wording helpers (never show an exact-looking distance/fare)
+  const approxWord = lang === "bn" ? "আনুমানিক" : "Approx";
+  // Round to a friendly step so the number never reads as an exact measurement
+  const approxKm = useMemo(() => {
+    if (km == null) return null;
+    if (km <= 10) return km;
+    const step = km < 100 ? 5 : 10;
+    return Math.round(km / step) * step;
+  }, [km]);
+  const approxKmText = approxKm == null ? "-" : `≈ ${approxKm} km`;
+
   // Fare estimate
   const estimate = useMemo(() => {
     if (km == null) return null;
@@ -70,8 +81,9 @@ const Hero = () => {
   }, [km, outside, car, t]);
 
   const waMessage = encodeURIComponent(
-    `Hi Easy_Car, I'd like to book a ${car.name}.\nFrom: ${from || "-"}\nTo: ${to || "-"}\nDate: ${date || "-"}\nPickup Time: ${time || "-"}\nDistance: ${km != null ? km + " km" : "-"}\nEstimate: ${estimate?.text || "-"}`
+    `Hi Easy_Car, I'd like to book a ${car.name}.\nFrom: ${from || "-"}\nTo: ${to || "-"}\nDate: ${date || "-"}\nPickup Time: ${time || "-"}\nDistance: ${approxKmText} (approx)\nEstimated Fare: ${estimate?.text || "-"} (approx)`
   );
+
 
   return (
     <section id="home" className="relative bg-gradient-hero text-white overflow-hidden">
@@ -200,16 +212,17 @@ const Hero = () => {
             <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
               <h4 className="font-display font-semibold text-sm uppercase tracking-wider text-brand-black">{t("route_preview")}</h4>
               <div className="flex items-center gap-2 flex-wrap">
-                {km != null && (
+                {approxKm != null && (
                   <span className="text-xs font-semibold text-brand-red bg-brand-red/10 rounded-full px-3 py-1">
-                    {t("distance")}: {km} km
+                    {t("distance")}: ≈ {approxKm} km ({approxWord})
                   </span>
                 )}
                 {minutes != null && (
                   <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand-black bg-brand-yellow/25 rounded-full px-3 py-1">
-                    <Timer className="h-3 w-3" /> {t("est_time")}: {formatDuration(minutes)}
+                    <Timer className="h-3 w-3" /> {t("est_time")}: ≈ {formatDuration(minutes)}
                   </span>
                 )}
+
               </div>
             </div>
 
@@ -219,20 +232,22 @@ const Hero = () => {
               <RoutePreview
                 fromLabel={lang === "bn" ? matchedFrom.bn : matchedFrom.en}
                 toLabel={lang === "bn" ? matchedTo.bn : matchedTo.en}
-                km={km!}
+                km={approxKm!}
                 minutes={minutes}
                 perKm={car.perKm}
                 outside={outside}
+                approxWord={approxWord}
               />
             )}
 
             {estimate && (
               <div className="mt-4 grid sm:grid-cols-2 gap-3">
                 <div className="liquid-glass liquid-dark rounded-2xl p-4">
-                  <div className="text-[10px] uppercase tracking-wider text-brand-yellow">{estimate.label}</div>
-                  <div className="mt-1 font-display font-bold text-2xl text-white">{estimate.text}</div>
+                  <div className="text-[10px] uppercase tracking-wider text-brand-yellow">{estimate.label} ({approxWord})</div>
+                  <div className="mt-1 font-display font-bold text-2xl text-white">≈ {estimate.text}</div>
                   <div className="text-[11px] text-white/60 mt-1">{t("fare_variable_note")}</div>
                 </div>
+
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
@@ -293,7 +308,7 @@ const Hero = () => {
 };
 
 /* ---------- Route Preview (curved SVG line w/ midpoint km marker) ---------- */
-const RoutePreview = ({ fromLabel, toLabel, km, minutes, perKm, outside }: { fromLabel: string; toLabel: string; km: number; minutes: number | null; perKm: number; outside: boolean }) => {
+const RoutePreview = ({ fromLabel, toLabel, km, minutes, perKm, outside, approxWord }: { fromLabel: string; toLabel: string; km: number; minutes: number | null; perKm: number; outside: boolean; approxWord: string }) => {
   const W = 600, H = 140;
   // Curved path from left to right
   const d = `M 40 ${H - 30} C ${W * 0.3} 20, ${W * 0.6} ${H - 10}, ${W - 40} 30`;
@@ -314,15 +329,16 @@ const RoutePreview = ({ fromLabel, toLabel, km, minutes, perKm, outside }: { fro
         <circle cx={W - 40} cy="30" r="8" fill="#E11D48" />
         <circle cx={W - 40} cy="30" r="3" fill="#fff" />
         <text x={W - 40} y="55" textAnchor="middle" className="fill-[#18181B]" fontSize="11" fontWeight="700">{toLabel}</text>
-        {/* Midpoint km marker */}
+        {/* Midpoint km marker (approximate) */}
         <g transform={`translate(${midX} ${midY})`}>
-          <rect x="-38" y="-14" width="76" height="28" rx="14" fill="#18181B" />
-          <text x="0" y="5" textAnchor="middle" fill="#FFD700" fontSize="13" fontWeight="800">{km} km</text>
+          <rect x="-48" y="-14" width="96" height="28" rx="14" fill="#18181B" />
+          <text x="0" y="5" textAnchor="middle" fill="#FFD700" fontSize="13" fontWeight="800">≈ {km} km</text>
         </g>
       </svg>
       <div className="text-[11px] text-muted-foreground text-center mt-1">
-        {outside ? <>≈ {km} km × ৳{perKm}/km{minutes != null && <> · ~{formatDuration(minutes)}</>}</> : <>{km} km route preview{minutes != null && <> · ~{formatDuration(minutes)}</>}</>}
+        {outside ? <>≈ {km} km × ৳{perKm}/km{minutes != null && <> · ~{formatDuration(minutes)}</>} ({approxWord})</> : <>≈ {km} km{minutes != null && <> · ~{formatDuration(minutes)}</>} ({approxWord})</>}
       </div>
+
     </div>
   );
 };
