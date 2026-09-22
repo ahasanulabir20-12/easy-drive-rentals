@@ -212,16 +212,17 @@ const Hero = () => {
             <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
               <h4 className="font-display font-semibold text-sm uppercase tracking-wider text-brand-black">{t("route_preview")}</h4>
               <div className="flex items-center gap-2 flex-wrap">
-                {km != null && (
+                {approxKm != null && (
                   <span className="text-xs font-semibold text-brand-red bg-brand-red/10 rounded-full px-3 py-1">
-                    {t("distance")}: {km} km
+                    {t("distance")}: ≈ {approxKm} km ({approxWord})
                   </span>
                 )}
                 {minutes != null && (
                   <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand-black bg-brand-yellow/25 rounded-full px-3 py-1">
-                    <Timer className="h-3 w-3" /> {t("est_time")}: {formatDuration(minutes)}
+                    <Timer className="h-3 w-3" /> {t("est_time")}: ≈ {formatDuration(minutes)}
                   </span>
                 )}
+
               </div>
             </div>
 
