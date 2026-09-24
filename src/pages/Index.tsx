@@ -5,6 +5,7 @@ import Fleet from "@/components/site/Fleet";
 import OurCars from "@/components/site/OurCars";
 import Services from "@/components/site/Services";
 import Contact from "@/components/site/Contact";
+import SmartTips from "@/components/site/SmartTips";
 import Footer from "@/components/site/Footer";
 import WhatsAppButton from "@/components/site/WhatsAppButton";
 import { LanguageProvider } from "@/context/LanguageContext";
@@ -20,6 +21,7 @@ const Index = () => {
           <Fleet />
           <Pricing />
           <Services />
+          <SmartTips />
           <Contact />
         </main>
         <Footer />

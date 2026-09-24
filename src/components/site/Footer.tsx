@@ -5,9 +5,9 @@ const Footer = () => (
     <div className="container flex flex-col md:flex-row items-center justify-between gap-4">
       <div className="flex items-center gap-2">
         <img src={logo} alt="Easy_Car" className="h-9 w-auto rounded-md bg-white/95 p-1 object-contain" />
-        <span className="font-display font-bold text-white">Easy<span className="text-brand-yellow">_</span>Car</span>
+        <span className="font-display font-bold text-white">Abir <span className="text-brand-yellow">Rent A Car</span></span>
       </div>
-      <p className="text-sm">© {new Date().getFullYear()} Easy_Car. All rights reserved.</p>
+      <p className="text-sm">© {new Date().getFullYear()} Abir Rent A Car. All rights reserved.</p>
       <p className="text-sm">Munshiganj · Bangladesh</p>
     </div>
   </footer>
