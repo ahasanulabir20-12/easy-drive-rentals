@@ -13,8 +13,8 @@ const Header = () => {
             alt="Easy_Car logo"
             className="h-10 w-auto rounded-md bg-white/95 p-1 object-contain group-hover:scale-105 transition-smooth"
           />
-          <span className="font-display font-bold text-xl text-white hidden xs:inline sm:inline">
-            Easy<span className="text-brand-yellow">_</span>Car
+          <span className="font-display font-bold text-lg sm:text-xl text-white hidden xs:inline sm:inline leading-tight">
+            Abir <span className="text-brand-yellow">Rent A Car</span>
           </span>
         </a>
 
