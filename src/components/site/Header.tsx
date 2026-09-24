@@ -1,9 +1,18 @@
-import { Phone, Languages } from "lucide-react";
+import { useState } from "react";
+import { Phone, Languages, Menu, X } from "lucide-react";
 import logo from "@/assets/easy-car-logo.jpg";
 import { useLang } from "@/context/LanguageContext";
 
 const Header = () => {
   const { lang, setLang, t } = useLang();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const navLinks = [
+    { href: "#fleet", label: t("nav_fleet") },
+    { href: "#pricing", label: t("nav_pricing") },
+    { href: "#services", label: t("nav_services") },
+    { href: "#contact", label: t("nav_contact") },
+  ];
   return (
     <header className="sticky top-0 z-50 w-full bg-brand-black/95 backdrop-blur supports-[backdrop-filter]:bg-brand-black/80 border-b border-white/5">
       <div className="container flex h-16 items-center justify-between gap-3">
@@ -19,10 +28,9 @@ const Header = () => {
         </a>
 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-white/80">
-          <a href="#fleet" className="hover:text-brand-yellow transition-smooth">{t("nav_fleet")}</a>
-          <a href="#pricing" className="hover:text-brand-yellow transition-smooth">{t("nav_pricing")}</a>
-          <a href="#services" className="hover:text-brand-yellow transition-smooth">{t("nav_services")}</a>
-          <a href="#contact" className="hover:text-brand-yellow transition-smooth">{t("nav_contact")}</a>
+          {navLinks.map((link) => (
+            <a key={link.href} href={link.href} className="hover:text-brand-yellow transition-smooth">{link.label}</a>
+          ))}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -41,8 +49,31 @@ const Header = () => {
             <Phone className="h-4 w-4" />
             <span className="hidden sm:inline">{t("call_now")}</span>
           </a>
+          <button
+            onClick={() => setMenuOpen((v) => !v)}
+            className="md:hidden inline-flex items-center justify-center rounded-full border border-white/15 text-white/90 hover:text-brand-yellow hover:border-brand-yellow/60 h-9 w-9 transition-smooth"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
         </div>
       </div>
+
+      {menuOpen && (
+        <nav className="md:hidden border-t border-white/10 bg-brand-black/98 px-4 py-3 flex flex-col gap-1 animate-fade-in">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setMenuOpen(false)}
+              className="rounded-lg px-3 py-2.5 text-sm font-medium text-white/85 hover:bg-white/5 hover:text-brand-yellow transition-smooth"
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      )}
     </header>
   );
 };

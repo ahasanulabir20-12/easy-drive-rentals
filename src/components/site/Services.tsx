@@ -1,4 +1,5 @@
 import { CalendarDays, Plane, PartyPopper, Ambulance } from "lucide-react";
+import SectionKicker from "@/components/site/SectionKicker";
 import { useLang } from "@/context/LanguageContext";
 
 const Services = () => {
@@ -14,7 +15,7 @@ const Services = () => {
     <section id="services" className="py-20 md:py-28 bg-background">
       <div className="container">
         <div className="text-center max-w-2xl mx-auto">
-          <span className="text-xs font-semibold uppercase tracking-widest text-brand-red">{t("services_kicker")}</span>
+          <SectionKicker>{t("services_kicker")}</SectionKicker>
           <h2 className="mt-3 font-display font-bold text-4xl md:text-5xl text-balance">
             {t("services_title")}
           </h2>

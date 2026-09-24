@@ -196,17 +196,20 @@ const Hero = () => {
           </div>
 
           {/* Trip estimate / route preview */}
-          <div className="mt-5 rounded-2xl border border-dashed border-border bg-muted/20 p-4">
-            <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
-              <h4 className="font-display font-semibold text-sm uppercase tracking-wider text-brand-black">{t("route_preview")}</h4>
+          <div className="mt-6 rounded-2xl border border-border/70 bg-muted/10 p-5 sm:p-6">
+            <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+              <h4 className="font-display font-semibold text-base text-brand-black flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-brand-red" />
+                {t("route_preview")}
+              </h4>
               <div className="flex items-center gap-2 flex-wrap">
                 {approxKm != null && (
-                  <span className="text-xs font-semibold text-brand-red bg-brand-red/10 rounded-full px-3 py-1">
-                    {t("distance")}: ≈ {approxKm} km ({approxWord})
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-100 rounded-full px-3 py-1.5">
+                    <MapPin className="h-3 w-3" /> {t("distance")}: ≈ {approxKm} km ({approxWord})
                   </span>
                 )}
                 {minutes != null && (
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand-black bg-brand-yellow/25 rounded-full px-3 py-1">
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand-black bg-brand-yellow/25 rounded-full px-3 py-1.5">
                     <Timer className="h-3 w-3" /> {t("est_time")}: ≈ {formatDuration(minutes)}
                   </span>
                 )}
@@ -215,7 +218,7 @@ const Hero = () => {
             </div>
 
             {!matchedFrom || !matchedTo ? (
-              <p className="text-sm text-muted-foreground py-6 text-center">{t("pick_route")}</p>
+              <p className="text-sm text-muted-foreground py-10 text-center">{t("pick_route")}</p>
             ) : (
               <RoutePreview
                 fromLabel={lang === "bn" ? matchedFrom.bn : matchedFrom.en}
@@ -227,6 +230,7 @@ const Hero = () => {
                 approxWord={approxWord}
               />
             )}
+
 
             {estimate && (
               <div className="mt-4 grid sm:grid-cols-2 gap-3">
@@ -303,6 +307,70 @@ const Stat = ({ value }: { value: string }) => (
   </span>
 );
 
+/* ---------- Small illustrated scene pieces (kept as reusable vector components) ---------- */
+const SceneTree = ({ x, y, s = 1, c = "#4ade80" }: { x: number; y: number; s?: number; c?: string }) => (
+  <g transform={`translate(${x} ${y}) scale(${s})`}>
+    <rect x="-2" y="0" width="4" height="9" fill="#92653b" />
+    <circle cx="-6" cy="-3" r="6.5" fill={c} opacity="0.85" />
+    <circle cx="6" cy="-3" r="6.5" fill={c} opacity="0.85" />
+    <circle cx="0" cy="-8" r="8.5" fill={c} />
+  </g>
+);
+
+const ScenePond = ({ x, y, rx = 24, ry = 10 }: { x: number; y: number; rx?: number; ry?: number }) => (
+  <g transform={`translate(${x} ${y})`}>
+    <ellipse rx={rx} ry={ry} fill="#7dd3fc" opacity="0.55" />
+    <ellipse rx={rx * 0.55} ry={ry * 0.4} cy={-ry * 0.3} fill="#e0f2fe" opacity="0.7" />
+  </g>
+);
+
+const SceneHome = ({ x, y }: { x: number; y: number }) => (
+  <g transform={`translate(${x} ${y})`}>
+    <rect x="-12" y="-2" width="24" height="17" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1" />
+    <path d="M -15 -2 L 0 -15 L 15 -2 Z" fill="#f59e0b" />
+    <rect x="-3.5" y="5" width="7" height="10" fill="#92653b" />
+    <rect x="5" y="2" width="4.5" height="4.5" fill="#7dd3fc" stroke="#94a3b8" strokeWidth="0.6" />
+    <rect x="-9.5" y="2" width="4.5" height="4.5" fill="#7dd3fc" stroke="#94a3b8" strokeWidth="0.6" />
+  </g>
+);
+
+const SceneBuildings = ({ x, y }: { x: number; y: number }) => {
+  const blocks = [
+    { dx: 0, h: 46, w: 15, fill: "#cbd5e1" },
+    { dx: 17, h: 64, w: 15, fill: "#94a3b8" },
+    { dx: 34, h: 38, w: 15, fill: "#cbd5e1" },
+  ];
+  return (
+    <g transform={`translate(${x} ${y})`} opacity="0.92">
+      {blocks.map((b, i) => (
+        <g key={i} transform={`translate(${b.dx} ${-b.h})`}>
+          <rect width={b.w} height={b.h} fill={b.fill} />
+          {Array.from({ length: Math.max(1, Math.floor(b.h / 11)) }).map((_, r) => (
+            <g key={r}>
+              <rect x={3} y={6 + r * 11} width={3} height={3.5} fill="#fefce8" opacity="0.85" />
+              <rect x={b.w - 6} y={6 + r * 11} width={3} height={3.5} fill="#fefce8" opacity="0.6" />
+            </g>
+          ))}
+        </g>
+      ))}
+    </g>
+  );
+};
+
+const SceneCar = ({ x, y, className = "" }: { x: number; y: number; className?: string }) => (
+  <g transform={`translate(${x} ${y})`} className={className}>
+    <ellipse cx="0" cy="15" rx="17" ry="3" fill="#000" opacity="0.16" />
+    <path d="M -17 6 Q -15 -7 -6 -9 L 6 -9 Q 15 -7 17 6 Z" fill="#fafafa" stroke="#cbd5e1" strokeWidth="1" />
+    <rect x="-17" y="4" width="34" height="6" rx="3" fill="#e2e8f0" />
+    <rect x="-10" y="-9" width="7" height="5" rx="1" fill="#bae6fd" opacity="0.9" />
+    <rect x="3" y="-9" width="7" height="5" rx="1" fill="#bae6fd" opacity="0.9" />
+    <circle cx="-9" cy="10" r="3.6" fill="#18181B" />
+    <circle cx="9" cy="10" r="3.6" fill="#18181B" />
+    <circle cx="-9" cy="10" r="1.4" fill="#94a3b8" />
+    <circle cx="9" cy="10" r="1.4" fill="#94a3b8" />
+  </g>
+);
+
 /* ---------- Route Preview (illustrated road, two curve designs + conditional destination markers) ---------- */
 
 // Lucide icon path data (Plane / Hospital) embedded as nested <svg> so the marker
@@ -328,99 +396,119 @@ const getDestinationMarkerType = (label: string): DestinationMarkerType => {
 };
 
 const RoutePreview = ({ fromLabel, toLabel, km, minutes, perKm, outside, approxWord }: { fromLabel: string; toLabel: string; km: number; minutes: number | null; perKm: number; outside: boolean; approxWord: string }) => {
-  const W = 620, H = 170;
+  const W = 760, H = 230;
   const destType = useMemo(() => getDestinationMarkerType(toLabel), [toLabel]);
 
   // Two custom road designs: a sweeping open-highway curve for "Outside Dhaka" trips,
   // and a tighter winding street curve for "Inside Dhaka" trips.
   const d = outside
-    ? `M 46 124 C 160 38, 258 160, 360 92 S 498 18, 574 56`
-    : `M 46 96 C 132 152, 212 26, 302 96 S 470 154, 574 80`;
-  const fromX = 46;
-  const fromY = outside ? 124 : 96;
-  const toX = 574;
-  const toY = outside ? 56 : 80;
-  const midX = W / 2 + 6;
-  const midY = outside ? 96 : 110;
+    ? `M 56 172 C 210 44, 330 214, 470 120 S 630 22, 706 70`
+    : `M 56 130 C 178 202, 276 32, 388 130 S 596 204, 706 106`;
+  const fromX = 56;
+  const fromY = outside ? 172 : 130;
+  const toX = 706;
+  const toY = outside ? 70 : 106;
+  const carX = outside ? 470 : 388;
+  const carY = outside ? 120 : 130;
+  const midX = W / 2 + 8;
+  const midY = outside ? 150 : 168;
 
   const pinFill = destType === "pin" ? "#E11D48" : "#18181B";
 
   return (
-    <div className="relative w-full rounded-2xl overflow-hidden border border-border/60 bg-gradient-to-br from-sky-50 via-emerald-50/50 to-amber-50/40">
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-36" preserveAspectRatio="xMidYMid slice">
-        {/* soft decorative greenery + ponds */}
-        <ellipse cx="120" cy={outside ? 148 : 34} rx="26" ry="12" fill="#93c5fd" opacity="0.35" />
-        <ellipse cx="500" cy={outside ? 22 : 150} rx="22" ry="10" fill="#93c5fd" opacity="0.3" />
-        <circle cx="90" cy="30" r="14" fill="#bbf7d0" opacity="0.6" />
-        <circle cx="200" cy="150" r="10" fill="#86efac" opacity="0.5" />
-        <circle cx="430" cy="150" r="12" fill="#bbf7d0" opacity="0.55" />
-        <circle cx="330" cy="18" r="9" fill="#a7f3d0" opacity="0.55" />
+    <div className="group relative w-full rounded-2xl overflow-hidden border border-border/60 bg-gradient-to-br from-sky-50 via-emerald-50/50 to-amber-50/40 shadow-sm transition-shadow duration-300 hover:shadow-md">
+      <style>{`
+        @keyframes ecr-drift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+        .ecr-car { animation: ecr-drift 2.8s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+        @media (prefers-reduced-motion: reduce) { .ecr-car { animation: none; } }
+      `}</style>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-52 sm:h-60" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="ecr-sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#e0f2fe" />
+            <stop offset="100%" stopColor="#ecfdf5" />
+          </linearGradient>
+          <linearGradient id="ecr-road" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#4b5563" />
+            <stop offset="100%" stopColor="#1f2937" />
+          </linearGradient>
+        </defs>
 
-        {/* small home glyph near origin */}
-        <g transform={`translate(${fromX - 26} ${fromY - 34})`} opacity="0.85">
-          <rect x="-8" y="0" width="16" height="12" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="1" />
-          <path d="M -10 0 L 0 -8 L 10 0 Z" fill="#fbbf24" />
-        </g>
+        <rect x="0" y="0" width={W} height={H} fill="url(#ecr-sky)" opacity="0.5" />
 
-        {/* destination-side skyline, hidden when a special marker (airport/hospital) already tells the story */}
-        {destType === "pin" && (
-          <g opacity="0.8">
-            <rect x={toX + 14} y={toY - 40} width="10" height="30" fill="#cbd5e1" />
-            <rect x={toX + 26} y={toY - 52} width="10" height="42" fill="#94a3b8" />
-            <rect x={toX + 38} y={toY - 34} width="10" height="24" fill="#cbd5e1" />
-          </g>
-        )}
+        {/* ponds */}
+        <ScenePond x={140} y={outside ? 200 : 40} rx={30} ry={13} />
+        <ScenePond x={600} y={outside ? 30 : 195} rx={26} ry={11} />
 
-        {/* road: soft white base, shadow, dashed centerline */}
-        <path d={d} fill="none" stroke="#ffffff" strokeWidth="12" strokeLinecap="round" opacity="0.75" />
-        <path d={d} fill="none" stroke="#64748b" strokeWidth="8" strokeLinecap="round" opacity="0.3" />
-        <path d={d} fill="none" stroke="#ffffff" strokeWidth="1.6" strokeDasharray="7 7" opacity="0.9" />
+        {/* scattered trees for depth */}
+        <SceneTree x={95} y={outside ? 148 : 60} s={0.9} c="#4ade80" />
+        <SceneTree x={225} y={outside ? 195 : 185} s={1.1} c="#22c55e" />
+        <SceneTree x={330} y={outside ? 45 : 40} s={0.8} c="#4ade80" />
+        <SceneTree x={420} y={outside ? 200 : 195} s={1} c="#22c55e" />
+        <SceneTree x={545} y={outside ? 40 : 55} s={0.9} c="#4ade80" />
+        <SceneTree x={655} y={outside ? 195 : 175} s={1} c="#22c55e" />
 
-        {/* From marker */}
+        {/* origin home */}
+        <SceneHome x={fromX - 4} y={fromY - 42} />
+
+        {/* destination skyline for generic pin case */}
+        {destType === "pin" && <SceneBuildings x={toX + 16} y={toY + 6} />}
+
+        {/* road shadow + surface + dashed centerline */}
+        <path d={d} fill="none" stroke="#000" strokeWidth="15" strokeLinecap="round" opacity="0.08" transform="translate(0,4)" />
+        <path d={d} fill="none" stroke="url(#ecr-road)" strokeWidth="12" strokeLinecap="round" />
+        <path d={d} fill="none" stroke="#ffffff" strokeWidth="1.8" strokeDasharray="8 8" opacity="0.9" />
+
+        {/* riding car */}
+        <SceneCar x={carX} y={carY - 15} className="ecr-car" />
+
+        {/* From marker with live-pulse ring */}
+        <circle cx={fromX} cy={fromY} r="10" fill="#16A34A" opacity="0.35" className="animate-ping" />
         <circle cx={fromX} cy={fromY} r="10" fill="#ffffff" stroke="#16A34A" strokeWidth="3.5" />
         <circle cx={fromX} cy={fromY} r="3.5" fill="#16A34A" />
 
         {/* Distance badge on the road */}
         <g transform={`translate(${midX} ${midY})`}>
-          <rect x="-40" y="-15" width="80" height="30" rx="15" fill="#18181B" />
-          <text x="0" y="5" textAnchor="middle" fill="#FFD700" fontSize="13" fontWeight="800">≈ {km} km</text>
+          <rect x="-42" y="-16" width="84" height="32" rx="16" fill="#18181B" />
+          <text x="0" y="5" textAnchor="middle" fill="#FFD700" fontSize="14" fontWeight="800">≈ {km} km</text>
         </g>
 
-        {/* To marker: teardrop pin, colored/iconed by destination type */}
+        {/* To marker: teardrop pin, colored/iconed by destination type, with live-pulse ring */}
+        <circle cx={toX} cy={toY - 4} r="11" fill={pinFill} opacity="0.3" className="animate-ping" />
         <g transform={`translate(${toX} ${toY})`}>
           <path
-            d="M0 -24 C 11 -24 20 -15 20 -4 C 20 10 0 26 0 26 C 0 26 -20 10 -20 -4 C -20 -15 -11 -24 0 -24 Z"
+            d="M0 -26 C 12 -26 21 -16 21 -4 C 21 11 0 28 0 28 C 0 28 -21 11 -21 -4 C -21 -16 -12 -26 0 -26 Z"
             fill={pinFill}
           />
-          <circle cx="0" cy="-4" r="10.5" fill="#ffffff" />
+          <circle cx="0" cy="-4" r="11" fill="#ffffff" />
           {destType === "airport" && (
-            <svg x="-7" y="-11" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#18181B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg x="-7.5" y="-11.5" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#18181B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d={PLANE_ICON_PATH} />
             </svg>
           )}
           {destType === "hospital" && (
-            <svg x="-7" y="-11" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg x="-7.5" y="-11.5" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               {HOSPITAL_ICON_PATHS.map((p) => (
                 <path key={p} d={p} />
               ))}
             </svg>
           )}
-          {destType === "pin" && <circle cx="0" cy="-4" r="4" fill="#E11D48" />}
+          {destType === "pin" && <circle cx="0" cy="-4" r="4.5" fill="#E11D48" />}
         </g>
       </svg>
 
       {/* From / To labels */}
-      <div className="absolute left-3 bottom-2 inline-flex items-center gap-1.5 rounded-full bg-brand-black/90 text-white text-[10px] font-bold px-2.5 py-1">
+      <div className="absolute left-4 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-brand-black/90 text-white text-xs font-bold px-3 py-1.5 shadow-sm transition-transform duration-300 group-hover:-translate-y-0.5">
         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
         {fromLabel}
       </div>
-      <div className="absolute right-3 top-2 inline-flex items-center gap-1.5 rounded-full bg-brand-black/90 text-white text-[10px] font-bold px-2.5 py-1">
-        {destType === "airport" && <Plane className="h-3 w-3 text-brand-yellow" />}
-        {destType === "hospital" && <Hospital className="h-3 w-3 text-red-400" />}
+      <div className="absolute right-4 top-3 inline-flex items-center gap-1.5 rounded-full bg-brand-black/90 text-white text-xs font-bold px-3 py-1.5 shadow-sm transition-transform duration-300 group-hover:-translate-y-0.5">
+        {destType === "airport" && <Plane className="h-3.5 w-3.5 text-brand-yellow" />}
+        {destType === "hospital" && <Hospital className="h-3.5 w-3.5 text-red-400" />}
         {destType === "pin" && <span className="h-1.5 w-1.5 rounded-full bg-brand-red" />}
         {toLabel}
       </div>
-      <div className="relative text-[11px] text-muted-foreground text-center py-1.5 bg-background/40">
+      <div className="relative text-xs text-muted-foreground text-center py-2.5 bg-background/40 border-t border-border/40">
         {outside ? <>≈ {km} km × ৳{perKm}/km{minutes != null && <> · ~{formatDuration(minutes)}</>} ({approxWord})</> : <>≈ {km} km{minutes != null && <> · ~{formatDuration(minutes)}</>} ({approxWord})</>}
       </div>
 

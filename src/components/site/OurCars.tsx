@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Users, Snowflake, Fuel, Cog, X, UserRound } from "lucide-react";
 import CarIcon from "@/components/site/CarIcon";
+import SectionKicker from "@/components/site/SectionKicker";
 import { useLang } from "@/context/LanguageContext";
 
 type CatKey = "sedan" | "micro" | "bus";
@@ -61,7 +62,7 @@ const OurCars = () => {
       <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ background: "radial-gradient(60% 60% at 50% 0%, hsl(45 80% 60% / 0.4), transparent)" }} />
       <div className="container relative">
         <div className="text-center max-w-2xl mx-auto">
-          <span className="text-xs font-semibold uppercase tracking-widest text-brand-yellow">{t("our_cars")}</span>
+          <SectionKicker tone="yellow">{t("our_cars")}</SectionKicker>
           <h2 className="mt-3 font-display font-bold text-4xl md:text-5xl text-balance">{t("our_cars_title")}</h2>
         </div>
 

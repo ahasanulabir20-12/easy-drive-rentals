@@ -1,6 +1,7 @@
 import { Users } from "lucide-react";
 import { fleet } from "@/data/fleet";
 import CarIcon from "@/components/site/CarIcon";
+import SectionKicker from "@/components/site/SectionKicker";
 import { useLang } from "@/context/LanguageContext";
 
 const Fleet = () => {
@@ -10,7 +11,7 @@ const Fleet = () => {
       <div className="container">
         <div className="flex items-end justify-between flex-wrap gap-4 max-w-3xl">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-widest text-brand-red">{t("fleet_kicker")}</span>
+            <SectionKicker>{t("fleet_kicker")}</SectionKicker>
             <h2 className="mt-3 font-display font-bold text-4xl md:text-5xl text-balance">
               {t("fleet_title")}
             </h2>

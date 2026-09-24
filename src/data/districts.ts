@@ -460,10 +460,24 @@ export const distanceKm = (a: District, b: District) => {
   return Math.round(R * 2 * Math.asin(Math.sqrt(x)) * 1.25);
 };
 
-// Estimated travel time (minutes) — city vs highway average speeds
+// Estimated travel time (minutes).
+// Calibrated against real-world reference points rather than a flat "free-flow" speed:
+// - Inside Dhaka: city-wide average speed has been measured between ~7-15 km/h in recent
+//   studies (World Bank / BUET), and Google Maps shows a real 9 km airport→Gulshan trip
+//   taking ~55 min in traffic. Short trips near the congested core are hit hardest by
+//   signals/jams; longer cross-city trips average a little faster on arterial roads.
+//   A fixed buffer accounts for pickup + traffic-signal stops.
+// - Outside Dhaka: highway/intercity travel, which is faster but still includes town
+//   crossings, tolls and rest stops, so effective average is below the road's speed limit.
 export const estimateMinutes = (km: number, outside: boolean) => {
-  const avg = outside ? 55 : 28;
-  return Math.max(5, Math.round((km / avg) * 60));
+  if (outside) {
+    const avg = 45; // km/h effective average on intercity highways
+    const overhead = 15; // tolls, town crossings, rest stops
+    return Math.max(25, Math.round((km / avg) * 60) + overhead);
+  }
+  const avg = km <= 5 ? 12 : km <= 12 ? 15 : 18; // km/h — Dhaka city traffic
+  const overhead = 6; // pickup + signal stops
+  return Math.max(12, Math.round((km / avg) * 60) + overhead);
 };
 
 export const formatDuration = (mins: number) => {

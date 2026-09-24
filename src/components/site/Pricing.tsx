@@ -1,5 +1,6 @@
 import { Info } from "lucide-react";
 import { fleet, formatRange } from "@/data/fleet";
+import SectionKicker from "@/components/site/SectionKicker";
 import { useLang } from "@/context/LanguageContext";
 
 const Pricing = () => {
@@ -9,7 +10,7 @@ const Pricing = () => {
     <section id="pricing" className="py-20 md:py-28 bg-background">
       <div className="container">
         <div className="text-center max-w-2xl mx-auto">
-          <span className="text-xs font-semibold uppercase tracking-widest text-brand-red">{t("pricing_kicker")}</span>
+          <SectionKicker>{t("pricing_kicker")}</SectionKicker>
           <h2 className="mt-3 font-display font-bold text-4xl md:text-5xl text-balance">
             {t("pricing_title")}
           </h2>

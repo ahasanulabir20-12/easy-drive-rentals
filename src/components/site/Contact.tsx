@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useLang } from "@/context/LanguageContext";
 import { fleet } from "@/data/fleet";
 import { supabase } from "@/integrations/supabase/client";
+import SectionKicker from "@/components/site/SectionKicker";
 import { z } from "zod";
 
 const quoteSchema = z.object({
@@ -11,6 +12,8 @@ const quoteSchema = z.object({
   phone: z.string().trim().min(5).max(30),
   email: z.string().trim().email().max(255).optional().or(z.literal("")),
   car: z.string().min(1).max(60),
+  pickup: z.string().trim().min(2).max(150),
+  destination: z.string().trim().min(2).max(150),
   message: z.string().trim().max(1000).optional().or(z.literal("")),
 });
 
@@ -39,6 +42,8 @@ const Contact = () => {
       phone: String(fd.get("phone") || ""),
       email: String(fd.get("email") || ""),
       car: String(fd.get("car") || fleet[0].name),
+      pickup: String(fd.get("pickup") || ""),
+      destination: String(fd.get("destination") || ""),
       message: String(fd.get("message") || ""),
     });
     if (!parsed.success) {
@@ -49,8 +54,8 @@ const Contact = () => {
     const carObj = fleet.find((c) => c.name === data.car) ?? fleet[0];
     setSubmitting(true);
     const { error } = await supabase.from("bookings").insert({
-      pickup_location: "-",
-      destination: "-",
+      pickup_location: data.pickup,
+      destination: data.destination,
       trip_type: "inside",
       car_key: carObj.key,
       car_name: carObj.name,
@@ -74,7 +79,7 @@ const Contact = () => {
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-widest text-brand-red">{t("contact_kicker")}</span>
+            <SectionKicker>{t("contact_kicker")}</SectionKicker>
             <h2 className="mt-3 font-display font-bold text-4xl md:text-5xl text-balance">
               {t("contact_title")}
             </h2>
@@ -151,6 +156,10 @@ const Contact = () => {
               <div className="grid sm:grid-cols-2 gap-4">
                 <Input name="phone" label={t("phone")} type="tel" placeholder="+880..." required maxLength={20} />
                 <Input name="email" label={t("email")} type="email" placeholder="you@example.com" maxLength={120} />
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <Input name="pickup" label={lang === "bn" ? "কোথা থেকে" : "Pickup location"} placeholder={lang === "bn" ? "যেমন: ধানমন্ডি" : "e.g. Dhanmondi"} required maxLength={150} />
+                <Input name="destination" label={lang === "bn" ? "কোথায় যাবেন" : "Destination"} placeholder={lang === "bn" ? "যেমন: বিমানবন্দর" : "e.g. Airport"} required maxLength={150} />
               </div>
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("vehicle_needed")}</label>
