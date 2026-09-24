@@ -295,6 +295,14 @@ const Hero = () => {
   );
 };
 
+/* ---------- Trust stat pill ---------- */
+const Stat = ({ value }: { value: string }) => (
+  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 border border-white/15 px-3 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-sm">
+    <span className="h-1.5 w-1.5 rounded-full bg-brand-yellow" />
+    {value}
+  </span>
+);
+
 /* ---------- Route Preview (curved SVG line w/ midpoint km marker) ---------- */
 const RoutePreview = ({ fromLabel, toLabel, km, minutes, perKm, outside, approxWord }: { fromLabel: string; toLabel: string; km: number; minutes: number | null; perKm: number; outside: boolean; approxWord: string }) => {
   const W = 600, H = 140;
