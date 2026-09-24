@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import { MapPin, Calendar, Clock, ArrowRight, Car as CarIconLucide, Phone, MessageCircle, Timer } from "lucide-react";
+import { MapPin, ArrowRight, Car as CarIconLucide, Phone, MessageCircle, Timer } from "lucide-react";
 import heroCar from "@/assets/hero-car.jpg";
 import { districts, distanceKm, isInsideDhakaDivision, estimateMinutes, formatDuration } from "@/data/districts";
 import { fleet, formatBDT, formatRange, type CarKey } from "@/data/fleet";
 import CarIcon from "@/components/site/CarIcon";
 import { useLang } from "@/context/LanguageContext";
 import BookingModal, { type BookingPayload } from "@/components/site/BookingModal";
+import DateField from "@/components/site/DateField";
+import TimeField from "@/components/site/TimeField";
 
 const WHATSAPP = "8801709539837";
 const CALL_PHONE = "8801965155166";
@@ -104,6 +106,14 @@ const Hero = () => {
             {t("hero_title_2")}
           </h1>
           <p className="mt-6 text-lg text-white/70 max-w-xl reveal reveal-delay-2">{t("hero_sub")}</p>
+
+          {/* Trust stats */}
+          <div className="mt-8 flex flex-wrap gap-3 reveal reveal-delay-2">
+            <Stat value={t("trust_customers")} />
+            <Stat value={t("trust_rides")} />
+            <Stat value={t("trust_rating")} />
+            <Stat value={t("trust_support")} />
+          </div>
         </div>
 
         {/* Booking Widget — all-in-one */}
@@ -138,30 +148,8 @@ const Hero = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
             <DistrictField icon={<MapPin className="h-4 w-4" />} label={t("from")} placeholder={t("pickup_ph")} value={from} onChange={setFrom} />
             <DistrictField icon={<MapPin className="h-4 w-4" />} label={t("to")} placeholder={t("dest_ph")} value={to} onChange={setTo} />
-            <label className="block">
-              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t("date")}</span>
-              <div className="mt-1 flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5 focus-within:border-brand-yellow focus-within:ring-2 focus-within:ring-brand-yellow/20 transition-smooth">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full bg-transparent outline-none text-sm placeholder:text-muted-foreground"
-                />
-              </div>
-            </label>
-            <label className="block">
-              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t("pickup_time")}</span>
-              <div className="mt-1 flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5 focus-within:border-brand-yellow focus-within:ring-2 focus-within:ring-brand-yellow/20 transition-smooth">
-                <Clock className="h-4 w-4 text-muted-foreground" />
-                <input
-                  type="time"
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  className="w-full bg-transparent outline-none text-sm placeholder:text-muted-foreground"
-                />
-              </div>
-            </label>
+            <DateField value={date} onChange={setDate} />
+            <TimeField value={time} onChange={setTime} />
 
 
 
