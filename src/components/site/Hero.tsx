@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { MapPin, ArrowRight, Car as CarIconLucide, Phone, MessageCircle, Timer } from "lucide-react";
+import { MapPin, ArrowRight, Car as CarIconLucide, Phone, MessageCircle, Timer, Plane, Hospital } from "lucide-react";
 import heroCar from "@/assets/hero-car.jpg";
 import { districts, distanceKm, isInsideDhakaDivision, estimateMinutes, formatDuration } from "@/data/districts";
 import { fleet, formatBDT, formatRange, type CarKey } from "@/data/fleet";
@@ -303,35 +303,124 @@ const Stat = ({ value }: { value: string }) => (
   </span>
 );
 
-/* ---------- Route Preview (curved SVG line w/ midpoint km marker) ---------- */
+/* ---------- Route Preview (illustrated road, two curve designs + conditional destination markers) ---------- */
+
+// Lucide icon path data (Plane / Hospital) embedded as nested <svg> so the marker
+// renders pixel-accurate inside the road SVG at any viewport size.
+const PLANE_ICON_PATH =
+  "M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z";
+const HOSPITAL_ICON_PATHS = [
+  "M12 6v4",
+  "M14 14h-4",
+  "M14 18h-4",
+  "M14 8h-4",
+  "M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2",
+  "M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18",
+];
+
+type DestinationMarkerType = "airport" | "hospital" | "pin";
+
+const getDestinationMarkerType = (label: string): DestinationMarkerType => {
+  const l = label.toLowerCase();
+  if (l.includes("airport") || l.includes("বিমানবন্দর")) return "airport";
+  if (l.includes("hospital") || l.includes("clinic") || l.includes("হাসপাতাল") || l.includes("ক্লিনিক")) return "hospital";
+  return "pin";
+};
+
 const RoutePreview = ({ fromLabel, toLabel, km, minutes, perKm, outside, approxWord }: { fromLabel: string; toLabel: string; km: number; minutes: number | null; perKm: number; outside: boolean; approxWord: string }) => {
-  const W = 600, H = 140;
-  // Curved path from left to right
-  const d = `M 40 ${H - 30} C ${W * 0.3} 20, ${W * 0.6} ${H - 10}, ${W - 40} 30`;
-  const midX = W / 2;
-  const midY = H / 2 + 5;
+  const W = 620, H = 170;
+  const destType = useMemo(() => getDestinationMarkerType(toLabel), [toLabel]);
+
+  // Two custom road designs: a sweeping open-highway curve for "Outside Dhaka" trips,
+  // and a tighter winding street curve for "Inside Dhaka" trips.
+  const d = outside
+    ? `M 46 124 C 160 38, 258 160, 360 92 S 498 18, 574 56`
+    : `M 46 96 C 132 152, 212 26, 302 96 S 470 154, 574 80`;
+  const fromX = 46;
+  const fromY = outside ? 124 : 96;
+  const toX = 574;
+  const toY = outside ? 56 : 80;
+  const midX = W / 2 + 6;
+  const midY = outside ? 96 : 110;
+
+  const pinFill = destType === "pin" ? "#E11D48" : "#18181B";
+
   return (
-    <div className="w-full">
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-32">
-        {/* dashed road */}
-        <path d={d} fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth="2" strokeDasharray="6 6" opacity="0.5" />
-        {/* solid yellow overlay */}
-        <path d={d} fill="none" stroke="#FFD700" strokeWidth="3" strokeLinecap="round" />
-        {/* From pin */}
-        <circle cx="40" cy={H - 30} r="8" fill="#18181B" />
-        <circle cx="40" cy={H - 30} r="3" fill="#FFD700" />
-        <text x="40" y={H - 8} textAnchor="middle" className="fill-[#18181B]" fontSize="11" fontWeight="700">{fromLabel}</text>
-        {/* To pin */}
-        <circle cx={W - 40} cy="30" r="8" fill="#E11D48" />
-        <circle cx={W - 40} cy="30" r="3" fill="#fff" />
-        <text x={W - 40} y="55" textAnchor="middle" className="fill-[#18181B]" fontSize="11" fontWeight="700">{toLabel}</text>
-        {/* Midpoint km marker (approximate) */}
+    <div className="relative w-full rounded-2xl overflow-hidden border border-border/60 bg-gradient-to-br from-sky-50 via-emerald-50/50 to-amber-50/40">
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-36" preserveAspectRatio="xMidYMid slice">
+        {/* soft decorative greenery + ponds */}
+        <ellipse cx="120" cy={outside ? 148 : 34} rx="26" ry="12" fill="#93c5fd" opacity="0.35" />
+        <ellipse cx="500" cy={outside ? 22 : 150} rx="22" ry="10" fill="#93c5fd" opacity="0.3" />
+        <circle cx="90" cy="30" r="14" fill="#bbf7d0" opacity="0.6" />
+        <circle cx="200" cy="150" r="10" fill="#86efac" opacity="0.5" />
+        <circle cx="430" cy="150" r="12" fill="#bbf7d0" opacity="0.55" />
+        <circle cx="330" cy="18" r="9" fill="#a7f3d0" opacity="0.55" />
+
+        {/* small home glyph near origin */}
+        <g transform={`translate(${fromX - 26} ${fromY - 34})`} opacity="0.85">
+          <rect x="-8" y="0" width="16" height="12" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="1" />
+          <path d="M -10 0 L 0 -8 L 10 0 Z" fill="#fbbf24" />
+        </g>
+
+        {/* destination-side skyline, hidden when a special marker (airport/hospital) already tells the story */}
+        {destType === "pin" && (
+          <g opacity="0.8">
+            <rect x={toX + 14} y={toY - 40} width="10" height="30" fill="#cbd5e1" />
+            <rect x={toX + 26} y={toY - 52} width="10" height="42" fill="#94a3b8" />
+            <rect x={toX + 38} y={toY - 34} width="10" height="24" fill="#cbd5e1" />
+          </g>
+        )}
+
+        {/* road: soft white base, shadow, dashed centerline */}
+        <path d={d} fill="none" stroke="#ffffff" strokeWidth="12" strokeLinecap="round" opacity="0.75" />
+        <path d={d} fill="none" stroke="#64748b" strokeWidth="8" strokeLinecap="round" opacity="0.3" />
+        <path d={d} fill="none" stroke="#ffffff" strokeWidth="1.6" strokeDasharray="7 7" opacity="0.9" />
+
+        {/* From marker */}
+        <circle cx={fromX} cy={fromY} r="10" fill="#ffffff" stroke="#16A34A" strokeWidth="3.5" />
+        <circle cx={fromX} cy={fromY} r="3.5" fill="#16A34A" />
+
+        {/* Distance badge on the road */}
         <g transform={`translate(${midX} ${midY})`}>
-          <rect x="-48" y="-14" width="96" height="28" rx="14" fill="#18181B" />
+          <rect x="-40" y="-15" width="80" height="30" rx="15" fill="#18181B" />
           <text x="0" y="5" textAnchor="middle" fill="#FFD700" fontSize="13" fontWeight="800">≈ {km} km</text>
         </g>
+
+        {/* To marker: teardrop pin, colored/iconed by destination type */}
+        <g transform={`translate(${toX} ${toY})`}>
+          <path
+            d="M0 -24 C 11 -24 20 -15 20 -4 C 20 10 0 26 0 26 C 0 26 -20 10 -20 -4 C -20 -15 -11 -24 0 -24 Z"
+            fill={pinFill}
+          />
+          <circle cx="0" cy="-4" r="10.5" fill="#ffffff" />
+          {destType === "airport" && (
+            <svg x="-7" y="-11" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#18181B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d={PLANE_ICON_PATH} />
+            </svg>
+          )}
+          {destType === "hospital" && (
+            <svg x="-7" y="-11" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {HOSPITAL_ICON_PATHS.map((p) => (
+                <path key={p} d={p} />
+              ))}
+            </svg>
+          )}
+          {destType === "pin" && <circle cx="0" cy="-4" r="4" fill="#E11D48" />}
+        </g>
       </svg>
-      <div className="text-[11px] text-muted-foreground text-center mt-1">
+
+      {/* From / To labels */}
+      <div className="absolute left-3 bottom-2 inline-flex items-center gap-1.5 rounded-full bg-brand-black/90 text-white text-[10px] font-bold px-2.5 py-1">
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+        {fromLabel}
+      </div>
+      <div className="absolute right-3 top-2 inline-flex items-center gap-1.5 rounded-full bg-brand-black/90 text-white text-[10px] font-bold px-2.5 py-1">
+        {destType === "airport" && <Plane className="h-3 w-3 text-brand-yellow" />}
+        {destType === "hospital" && <Hospital className="h-3 w-3 text-red-400" />}
+        {destType === "pin" && <span className="h-1.5 w-1.5 rounded-full bg-brand-red" />}
+        {toLabel}
+      </div>
+      <div className="relative text-[11px] text-muted-foreground text-center py-1.5 bg-background/40">
         {outside ? <>≈ {km} km × ৳{perKm}/km{minutes != null && <> · ~{formatDuration(minutes)}</>} ({approxWord})</> : <>≈ {km} km{minutes != null && <> · ~{formatDuration(minutes)}</>} ({approxWord})</>}
       </div>
 
