@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Users, Snowflake, Fuel, Cog, X, UserRound } from "lucide-react";
 import CarIcon from "@/components/site/CarIcon";
 import SectionKicker from "@/components/site/SectionKicker";
@@ -55,6 +55,15 @@ const OurCars = () => {
   const { t } = useLang();
   const [driversOpen, setDriversOpen] = useState(false);
 
+  useEffect(() => {
+    if (!driversOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setDriversOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [driversOpen]);
+
   const allDrivers = CATS.flatMap((c) => c.drivers);
 
   return (
@@ -106,13 +115,16 @@ const OurCars = () => {
       </div>
 
       {driversOpen && (
-        <div className="fixed inset-0 z-[60] grid place-items-center bg-black/70 p-4" onClick={() => setDriversOpen(false)}>
+        <div className="fixed inset-0 z-[60] grid place-items-center bg-black/70 p-4" onClick={() => setDriversOpen(false)} role="presentation">
           <div
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="drivers-modal-title"
             className="w-full max-w-lg liquid-glass liquid-light rounded-3xl p-6"
           >
             <div className="flex items-center justify-between mb-5">
-              <h3 className="font-display font-bold text-2xl text-brand-black">{t("our_drivers")}</h3>
+              <h3 id="drivers-modal-title" className="font-display font-bold text-2xl text-brand-black">{t("our_drivers")}</h3>
               <button onClick={() => setDriversOpen(false)} className="rounded-full p-2 hover:bg-black/5 text-brand-black" aria-label="Close">
                 <X className="h-4 w-4" />
               </button>

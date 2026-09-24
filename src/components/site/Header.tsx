@@ -20,6 +20,8 @@ const Header = () => {
           <img
             src={logo}
             alt="Easy_Car logo"
+            width={40}
+            height={40}
             className="h-10 w-auto rounded-md bg-white/95 p-1 object-contain group-hover:scale-105 transition-smooth"
           />
           <span className="font-display font-bold text-lg sm:text-xl text-white hidden xs:inline sm:inline leading-tight">

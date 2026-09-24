@@ -90,7 +90,7 @@ const Hero = () => {
   return (
     <section id="home" className="relative bg-gradient-hero text-white overflow-hidden">
       <div className="absolute inset-0 opacity-30">
-        <img src={heroCar} alt="Premium rental car" className="w-full h-full object-cover object-right" />
+        <img src={heroCar} alt="" aria-hidden="true" fetchPriority="high" className="w-full h-full object-cover object-right" />
         <div className="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/80 to-transparent" />
       </div>
 

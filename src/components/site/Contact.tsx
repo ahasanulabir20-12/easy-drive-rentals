@@ -152,14 +152,14 @@ const Contact = () => {
             <p className="text-sm text-muted-foreground mt-1">{t("quote_sub")}</p>
 
             <div className="mt-6 space-y-4">
-              <Input name="name" label={t("full_name")} placeholder="Md. Karim" required maxLength={100} />
+              <Input name="name" label={t("full_name")} placeholder="Md. Karim" required maxLength={100} autoComplete="name" />
               <div className="grid sm:grid-cols-2 gap-4">
-                <Input name="phone" label={t("phone")} type="tel" placeholder="+880..." required maxLength={20} />
-                <Input name="email" label={t("email")} type="email" placeholder="you@example.com" maxLength={120} />
+                <Input name="phone" label={t("phone")} type="tel" inputMode="tel" placeholder="+880…" required maxLength={20} autoComplete="tel" spellCheck={false} />
+                <Input name="email" label={t("email")} type="email" inputMode="email" placeholder="you@example.com" maxLength={120} autoComplete="email" spellCheck={false} />
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
-                <Input name="pickup" label={lang === "bn" ? "কোথা থেকে" : "Pickup location"} placeholder={lang === "bn" ? "যেমন: ধানমন্ডি" : "e.g. Dhanmondi"} required maxLength={150} />
-                <Input name="destination" label={lang === "bn" ? "কোথায় যাবেন" : "Destination"} placeholder={lang === "bn" ? "যেমন: বিমানবন্দর" : "e.g. Airport"} required maxLength={150} />
+                <Input name="pickup" label={lang === "bn" ? "কোথা থেকে" : "Pickup location"} placeholder={lang === "bn" ? "যেমন: ধানমন্ডি" : "e.g. Dhanmondi"} required maxLength={150} autoComplete="off" />
+                <Input name="destination" label={lang === "bn" ? "কোথায় যাবেন" : "Destination"} placeholder={lang === "bn" ? "যেমন: বিমানবন্দর" : "e.g. Airport"} required maxLength={150} autoComplete="off" />
               </div>
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("vehicle_needed")}</label>

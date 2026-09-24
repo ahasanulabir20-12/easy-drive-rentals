@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X, Loader2, MessageCircle, Phone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -41,6 +41,15 @@ const BookingModal = ({ open, onClose, payload, action, whatsappUrl, callUrl }: 
   const [phone, setPhone] = useState("");
   const [saving, setSaving] = useState(false);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
+
   if (!open) return null;
 
   const submit = async (e: React.FormEvent) => {
@@ -72,13 +81,16 @@ const BookingModal = ({ open, onClose, payload, action, whatsappUrl, callUrl }: 
   };
 
   return (
-    <div className="fixed inset-0 z-[60] grid place-items-center bg-black/60 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-[60] grid place-items-center bg-black/60 p-4" onClick={onClose} role="presentation">
       <div
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="booking-modal-title"
         className="w-full max-w-md rounded-2xl bg-white text-brand-black shadow-card p-6"
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-display font-bold text-xl">
+          <h3 id="booking-modal-title" className="font-display font-bold text-xl">
             {lang === "bn" ? "আপনার বুকিং নিশ্চিত করুন" : "Confirm your booking"}
           </h3>
           <button onClick={onClose} className="rounded-full p-1.5 hover:bg-muted text-muted-foreground" aria-label="Close">
@@ -131,7 +143,7 @@ const BookingModal = ({ open, onClose, payload, action, whatsappUrl, callUrl }: 
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : action === "whatsapp" ? <MessageCircle className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
             {saving
-              ? (lang === "bn" ? "সংরক্ষণ হচ্ছে..." : "Saving...")
+              ? (lang === "bn" ? "সংরক্ষণ হচ্ছে…" : "Saving…")
               : action === "whatsapp" ? t("book_via_wa") : t("call_to_book")}
           </button>
         </form>
