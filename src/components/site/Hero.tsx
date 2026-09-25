@@ -8,6 +8,8 @@ import { useLang } from "@/context/LanguageContext";
 import BookingModal, { type BookingPayload } from "@/components/site/BookingModal";
 import DateField from "@/components/site/DateField";
 import TimeField from "@/components/site/TimeField";
+import HeroCarShowcase from "@/components/site/HeroCarShowcase";
+
 
 const WHATSAPP = "8801709539837";
 const CALL_PHONE = "8801965155166";
