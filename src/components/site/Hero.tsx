@@ -8,6 +8,8 @@ import { useLang } from "@/context/LanguageContext";
 import BookingModal, { type BookingPayload } from "@/components/site/BookingModal";
 import DateField from "@/components/site/DateField";
 import TimeField from "@/components/site/TimeField";
+import HeroCarShowcase from "@/components/site/HeroCarShowcase";
+
 
 const WHATSAPP = "8801709539837";
 const CALL_PHONE = "8801965155166";
@@ -95,29 +97,39 @@ const Hero = () => {
       </div>
 
       <div className="container relative z-10 py-20 md:py-28 lg:py-36">
-        <div className="max-w-3xl">
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand-yellow/15 border border-brand-yellow/30 px-4 py-1.5 text-xs font-semibold text-brand-yellow uppercase tracking-wider reveal">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand-yellow animate-pulse" />
-            {t("hero_badge")}
-          </span>
-          <h1 className="mt-6 font-display font-bold text-5xl sm:text-6xl lg:text-8xl leading-[0.95] text-balance reveal reveal-delay-1">
-            {t("hero_title_1")}{" "}
-            <span className="shine-text">{t("hero_title_accent")}</span>
-            {t("hero_title_2")}
-          </h1>
-          <p className="mt-6 text-lg text-white/70 max-w-xl reveal reveal-delay-2">{t("hero_sub")}</p>
+        <div className="grid lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-7 max-w-3xl">
+            <span className="inline-flex items-center gap-2 rounded-full bg-brand-yellow/15 border border-brand-yellow/30 px-4 py-1.5 text-xs font-semibold text-brand-yellow uppercase tracking-wider reveal">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-yellow animate-pulse" />
+              {t("hero_badge")}
+            </span>
+            <h1 className="mt-6 font-display font-bold text-5xl sm:text-6xl lg:text-7xl leading-[0.95] text-balance reveal reveal-delay-1">
+              {t("hero_title_1")}{" "}
+              <span className="shine-text">{t("hero_title_accent")}</span>
+              {t("hero_title_2")}
+            </h1>
+            <p className="mt-6 text-lg text-white/70 max-w-xl reveal reveal-delay-2">{t("hero_sub")}</p>
 
-          {/* Trust stats */}
-          <div className="mt-8 flex flex-wrap gap-3 reveal reveal-delay-2">
-            <Stat value={t("trust_customers")} />
-            <Stat value={t("trust_rides")} />
-            <Stat value={t("trust_rating")} />
-            <Stat value={t("trust_support")} />
+            {/* Trust stats */}
+            <div className="mt-8 flex flex-wrap gap-3 reveal reveal-delay-2">
+              <Stat value={t("trust_customers")} />
+              <Stat value={t("trust_rides")} />
+              <Stat value={t("trust_rating")} />
+              <Stat value={t("trust_support")} />
+            </div>
+          </div>
+
+          {/* Car showcase slider */}
+          <div className="lg:col-span-5 reveal reveal-delay-3">
+            <HeroCarShowcase />
+
+
           </div>
         </div>
 
+
         {/* Booking Widget — all-in-one */}
-        <div className="mt-12 bg-white text-brand-black rounded-2xl shadow-card p-5 md:p-6 max-w-5xl reveal reveal-delay-3">
+        <div id="booking-widget" className="mt-12 bg-white text-brand-black rounded-2xl shadow-card p-5 md:p-6 max-w-5xl reveal reveal-delay-3">
           <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
             <h3 className="font-display font-semibold text-lg">{t("book_ride")}</h3>
             <div className="flex items-center gap-2 flex-wrap">
