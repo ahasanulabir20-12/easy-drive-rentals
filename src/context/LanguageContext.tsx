@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 
 type Lang = "en" | "bn";
 
@@ -126,7 +126,9 @@ const dict = {
 type Dict = typeof dict.en;
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (k: keyof Dict) => string };
 
-const LanguageContext = createContext<Ctx | null>(null);
+// Keep a single context instance across hot reloads
+const g = globalThis as unknown as { __langCtx?: React.Context<Ctx | null> };
+const LanguageContext = g.__langCtx ?? (g.__langCtx = createContext<Ctx | null>(null));
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [lang, setLang] = useState<Lang>("en");
@@ -134,8 +136,6 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   return <LanguageContext.Provider value={{ lang, setLang, t }}>{children}</LanguageContext.Provider>;
 };
 
-export const useLang = () => {
-  const c = useContext(LanguageContext);
-  if (!c) throw new Error("useLang must be inside LanguageProvider");
-  return c;
-};
+const fallback: Ctx = { lang: "en", setLang: () => {}, t: (k) => dict.en[k] };
+
+export const useLang = () => useContext(LanguageContext) ?? fallback;
