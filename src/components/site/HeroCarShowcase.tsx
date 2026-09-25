@@ -48,8 +48,8 @@ const cars: ShowcaseCar[] = [
 
 const bnDigits = (s: string) => s.replace(/\d/g, (d) => "০১২৩৪৫৬৭৮৯"[Number(d)]);
 
-const HeroCarShowcase = ({ onSelect }: { onSelect?: (key: CarKey) => void }) => {
-  const { t, lang } = useLang();
+const HeroCarShowcase = () => {
+  const { lang } = useLang();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
