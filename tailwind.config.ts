@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Bebas Neue"', 'Barlow', 'sans-serif'],
-        sans: ['Barlow', 'system-ui', 'sans-serif'],
+        display: ['"Bebas Neue"', '"Baloo Da 2"', 'Barlow', 'sans-serif'],
+        sans: ['Barlow', '"Hind Siliguri"', 'system-ui', 'sans-serif'],
       },
       colors: {
         brand: {

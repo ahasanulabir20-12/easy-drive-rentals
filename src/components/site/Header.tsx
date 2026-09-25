@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Phone, Languages, Menu, X } from "lucide-react";
-import logo from "@/assets/easy-car-logo.jpg";
+import logo from "@/assets/abir-logo.jpg";
 import { useLang } from "@/context/LanguageContext";
 
 const Header = () => {
@@ -19,10 +19,10 @@ const Header = () => {
         <a href="#home" className="flex items-center gap-2 group min-w-0">
           <img
             src={logo}
-            alt="Easy_Car logo"
-            width={40}
-            height={40}
-            className="h-10 w-auto rounded-md bg-white/95 p-1 object-contain group-hover:scale-105 transition-smooth"
+            alt="Abir Rent A Car"
+            width={48}
+            height={48}
+            className="h-12 w-12 rounded-xl object-cover ring-1 ring-white/15 shadow-sm group-hover:scale-105 transition-smooth"
           />
           <span className="font-display font-bold text-lg sm:text-xl text-white hidden xs:inline sm:inline leading-tight">
             Abir <span className="text-brand-yellow">Rent A Car</span>

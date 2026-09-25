@@ -1,5 +1,5 @@
 import { Phone, MessageCircle } from "lucide-react";
-import logo from "@/assets/easy-car-logo.jpg";
+import logo from "@/assets/abir-logo.jpg";
 import { useLang } from "@/context/LanguageContext";
 
 const Footer = () => {
@@ -16,7 +16,7 @@ const Footer = () => {
       <div className="container flex flex-col gap-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
-            <img src={logo} alt="Easy_Car" width={36} height={36} className="h-9 w-auto rounded-md bg-white/95 p-1 object-contain" />
+            <img src={logo} alt="Abir Rent A Car" width={40} height={40} className="h-10 w-10 rounded-lg object-cover ring-1 ring-white/15" />
             <span className="font-display font-bold text-white">Abir <span className="text-brand-yellow">Rent A Car</span></span>
           </div>
 

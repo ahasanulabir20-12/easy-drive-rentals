@@ -57,13 +57,24 @@
   * { @apply border-border; }
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Barlow', system-ui, sans-serif;
+    font-family: 'Barlow', 'Hind Siliguri', system-ui, sans-serif;
     font-weight: 400;
   }
   h1, h2, h3, h4 {
-    font-family: 'Bebas Neue', 'Barlow', sans-serif;
+    font-family: 'Bebas Neue', 'Baloo Da 2', 'Barlow', sans-serif;
     letter-spacing: 0.01em;
     @apply tracking-wide;
+  }
+  html[lang="bn"] h1, html[lang="bn"] h2, html[lang="bn"] h3, html[lang="bn"] h4 {
+    letter-spacing: normal;
+    @apply tracking-normal;
+  }
+  /* Wide letter-spacing (tuned for Latin all-caps labels) distorts Bengali conjunct
+     glyphs wherever it's used - reset it site-wide when Bangla is active. */
+  html[lang="bn"] .tracking-wide,
+  html[lang="bn"] .tracking-wider,
+  html[lang="bn"] .tracking-widest {
+    letter-spacing: normal;
   }
 }
 

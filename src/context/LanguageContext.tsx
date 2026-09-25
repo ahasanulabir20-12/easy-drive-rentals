@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 type Lang = "en" | "bn";
 
@@ -133,6 +133,9 @@ const LanguageContext = g.__langCtx ?? (g.__langCtx = createContext<Ctx | null>(
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [lang, setLang] = useState<Lang>("en");
   const t = (k: keyof Dict) => dict[lang][k];
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
   return <LanguageContext.Provider value={{ lang, setLang, t }}>{children}</LanguageContext.Provider>;
 };
 
