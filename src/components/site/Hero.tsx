@@ -133,7 +133,7 @@ const Hero = () => {
 
 
         {/* Booking Widget — all-in-one */}
-        <div className="mt-12 bg-white text-brand-black rounded-2xl shadow-card p-5 md:p-6 max-w-5xl reveal reveal-delay-3">
+        <div id="booking-widget" className="mt-12 bg-white text-brand-black rounded-2xl shadow-card p-5 md:p-6 max-w-5xl reveal reveal-delay-3">
           <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
             <h3 className="font-display font-semibold text-lg">{t("book_ride")}</h3>
             <div className="flex items-center gap-2 flex-wrap">
