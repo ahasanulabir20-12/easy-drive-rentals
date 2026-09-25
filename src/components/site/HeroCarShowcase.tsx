@@ -109,7 +109,7 @@ const HeroCarShowcase = ({ onSelect }: { onSelect?: (key: CarKey) => void }) => 
         </button>
 
         {/* Info bar */}
-        <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between gap-3 rounded-2xl bg-white/95 px-3 py-2.5 shadow-md">
+        <div className="absolute bottom-2 left-2 right-2 rounded-2xl bg-white/95 px-3 py-2.5 shadow-md">
           <div className="min-w-0">
             <div className="font-display font-bold text-base sm:text-lg text-brand-black truncate">
               {lang === "bn" ? active.nameBn : active.name}
@@ -120,14 +120,8 @@ const HeroCarShowcase = ({ onSelect }: { onSelect?: (key: CarKey) => void }) => 
               <span className="inline-flex items-center gap-1"><Fuel className="h-3 w-3" />{lang === "bn" ? active.fuel.bn : active.fuel.en}</span>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => onSelect?.(active.key)}
-            className="liquid-glass liquid-gold shrink-0 rounded-xl px-3 py-2 text-xs font-bold"
-          >
-            {t("book_now")}
-          </button>
         </div>
+
       </div>
 
       {/* Thumbnails */}
