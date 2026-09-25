@@ -121,12 +121,8 @@ const Hero = () => {
 
           {/* Car showcase slider */}
           <div className="lg:col-span-5 reveal reveal-delay-3">
-            <HeroCarShowcase
-              onSelect={(k) => {
-                setSelectedCar(k);
-                document.getElementById("booking-widget")?.scrollIntoView({ behavior: "smooth", block: "center" });
-              }}
-            />
+            <HeroCarShowcase />
+
 
           </div>
         </div>
