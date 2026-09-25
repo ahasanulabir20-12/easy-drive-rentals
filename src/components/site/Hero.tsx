@@ -142,14 +142,14 @@ const Hero = () => {
                 <button
                   type="button"
                   onClick={() => { setOutside(false); setAutoSwitched(false); }}
-                  className={`px-4 py-1.5 rounded-full transition-smooth ${!outside ? "liquid-glass liquid-dark shadow-sm" : "text-muted-foreground"}`}
+                  className={`px-4 py-1.5 rounded-full transition-smooth ${!outside ? "liquid-glass liquid-dark shadow-sm" : "text-muted-foreground hover:text-brand-black"}`}
                 >
                   {t("inside")}
                 </button>
                 <button
                   type="button"
                   onClick={() => { setOutside(true); setAutoSwitched(false); }}
-                  className={`px-4 py-1.5 rounded-full transition-smooth ${outside ? "liquid-glass liquid-gold shadow-sm" : "text-muted-foreground"}`}
+                  className={`px-4 py-1.5 rounded-full transition-smooth ${outside ? "liquid-glass liquid-gold shadow-sm" : "text-muted-foreground hover:text-brand-black"}`}
                 >
                   {t("outside")}
                 </button>
@@ -171,7 +171,7 @@ const Hero = () => {
               <button
                 type="button"
                 onClick={() => setCarPickerOpen((v) => !v)}
-                className="mt-1 w-full flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5 hover:border-brand-yellow transition-smooth"
+                className="hover-press mt-1 w-full flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5 hover:border-brand-yellow transition-smooth"
               >
                 <CarIcon type={car.key} className="h-6 w-8 text-brand-black shrink-0" />
                 <div className="text-left flex-1 min-w-0">

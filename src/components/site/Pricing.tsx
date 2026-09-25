@@ -50,7 +50,7 @@ const Pricing = () => {
         {/* Mobile cards */}
         <div className="mt-10 grid gap-3 md:hidden">
           {fleet.map((c) => (
-            <div key={c.key} className="rounded-xl border border-border p-4 bg-background shadow-sm">
+            <div key={c.key} className="hover-lift hover-press rounded-xl border border-border p-4 bg-background shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="font-display font-semibold text-lg">{c.name}</div>

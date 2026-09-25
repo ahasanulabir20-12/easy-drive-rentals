@@ -49,7 +49,7 @@
     --gradient-yellow: linear-gradient(135deg, hsl(45 70% 60%) 0%, hsl(40 65% 45%) 100%);
     --gradient-emerald: linear-gradient(135deg, hsl(160 85% 14%) 0%, hsl(163 78% 24%) 100%);
 
-    --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), color 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
@@ -77,7 +77,8 @@
   .transition-smooth { transition: var(--transition-smooth); }
 
   .hover-scale { @apply transition-transform duration-300 hover:scale-[1.03]; }
-  .hover-lift { @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-card; }
+  .hover-lift { transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s cubic-bezier(0.4,0,0.2,1); }
+  .hover-lift:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
   .story-link {
     @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
   }
@@ -99,7 +100,7 @@
       0 1px 0 hsl(0 0% 100% / 0.35) inset,
       0 -1px 0 hsl(0 0% 0% / 0.1) inset,
       0 8px 24px -8px hsl(160 60% 10% / 0.35);
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .liquid-glass::before {
     content: ""; position: absolute; inset: 0; border-radius: inherit;
@@ -144,4 +145,35 @@
   background-clip: text;
   color: transparent;
   animation: shine 3.5s linear infinite;
+}
+
+@layer utilities {
+  /* Standard hover treatments for buttons/boxes across the site */
+  .hover-press {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .hover-press:hover { transform: translateY(-2px); }
+  .hover-press:active { transform: translateY(0) scale(0.98); }
+
+  .hover-pop {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .hover-pop:hover { transform: scale(1.035); }
+  .hover-pop:active { transform: scale(0.985); }
+}
+
+/* Respect motion sensitivity: shrink/disable continuous & decorative motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-float, .shine-text, .reveal, .ecr-car, .animate-ping, .animate-pulse, .animate-bounce, .animate-spin {
+    animation: none !important;
+  }
+  .hover-press:hover, .hover-pop:hover, .hover-lift:hover, .liquid-glass:hover {
+    transform: none !important;
+  }
 }

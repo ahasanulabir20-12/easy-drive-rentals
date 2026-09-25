@@ -30,7 +30,7 @@ const Footer = () => {
             <a
               href="tel:+8801965155166"
               aria-label={t("call_now")}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/15 hover:border-brand-yellow/60 hover:text-brand-yellow px-3 py-1.5 text-xs font-semibold transition-smooth"
+              className="hover-press inline-flex items-center gap-1.5 rounded-full border border-white/15 hover:border-brand-yellow/60 hover:text-brand-yellow px-3 py-1.5 text-xs font-semibold transition-smooth"
             >
               <Phone className="h-3.5 w-3.5" aria-hidden="true" /> +880 1965-155166
             </a>
@@ -39,7 +39,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp"
-              className="inline-flex items-center justify-center rounded-full border border-white/15 hover:border-brand-yellow/60 hover:text-brand-yellow h-8 w-8 transition-smooth"
+              className="hover-press inline-flex items-center justify-center rounded-full border border-white/15 hover:border-brand-yellow/60 hover:text-brand-yellow h-8 w-8 transition-smooth"
             >
               <MessageCircle className="h-4 w-4" aria-hidden="true" />
             </a>

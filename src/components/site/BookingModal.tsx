@@ -93,7 +93,7 @@ const BookingModal = ({ open, onClose, payload, action, whatsappUrl, callUrl }: 
           <h3 id="booking-modal-title" className="font-display font-bold text-xl">
             {lang === "bn" ? "আপনার বুকিং নিশ্চিত করুন" : "Confirm your booking"}
           </h3>
-          <button onClick={onClose} className="rounded-full p-1.5 hover:bg-muted text-muted-foreground" aria-label="Close">
+          <button onClick={onClose} className="hover-press rounded-full p-1.5 hover:bg-muted text-muted-foreground" aria-label="Close">
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -115,8 +115,9 @@ const BookingModal = ({ open, onClose, payload, action, whatsappUrl, callUrl }: 
               onChange={(e) => setName(e.target.value)}
               maxLength={120}
               required
+              autoComplete="name"
               placeholder="Md. Karim"
-              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20"
+              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none hover:border-brand-yellow/50 focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth"
             />
           </div>
           <div>
@@ -127,15 +128,18 @@ const BookingModal = ({ open, onClose, payload, action, whatsappUrl, callUrl }: 
               maxLength={30}
               required
               type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              spellCheck={false}
               placeholder="01XXXXXXXXX"
-              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20"
+              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none hover:border-brand-yellow/50 focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth"
             />
           </div>
 
           <button
             type="submit"
             disabled={saving}
-            className={`w-full inline-flex items-center justify-center gap-2 rounded-xl font-semibold py-3 transition-smooth ${
+            className={`hover-press w-full inline-flex items-center justify-center gap-2 rounded-xl font-semibold py-3 transition-smooth ${
               action === "whatsapp"
                 ? "bg-[#25D366] text-white hover:opacity-90"
                 : "bg-brand-yellow text-brand-black hover:bg-brand-black hover:text-brand-yellow"

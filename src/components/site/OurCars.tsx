@@ -106,7 +106,7 @@ const OurCars = () => {
           <button
             type="button"
             onClick={() => setDriversOpen(true)}
-            className="liquid-glass liquid-gold inline-flex items-center gap-2 rounded-2xl px-6 py-3 font-semibold"
+            className="hover-press liquid-glass liquid-gold inline-flex items-center gap-2 rounded-2xl px-6 py-3 font-semibold"
           >
             <UserRound className="h-4 w-4" />
             {t("view_drivers")}
@@ -125,7 +125,7 @@ const OurCars = () => {
           >
             <div className="flex items-center justify-between mb-5">
               <h3 id="drivers-modal-title" className="font-display font-bold text-2xl text-brand-black">{t("our_drivers")}</h3>
-              <button onClick={() => setDriversOpen(false)} className="rounded-full p-2 hover:bg-black/5 text-brand-black" aria-label="Close">
+              <button onClick={() => setDriversOpen(false)} className="hover-press rounded-full p-2 hover:bg-black/5 text-brand-black" aria-label="Close">
                 <X className="h-4 w-4" />
               </button>
             </div>

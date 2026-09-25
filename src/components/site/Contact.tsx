@@ -93,7 +93,7 @@ const Contact = () => {
                     <a
                       key={p.num}
                       href={`tel:+88${p.num}`}
-                      className="flex items-center gap-3 rounded-xl border border-border bg-background hover:border-brand-yellow hover:shadow-card transition-smooth p-3"
+                      className="hover-press flex items-center gap-3 rounded-xl border border-border bg-background hover:border-brand-yellow hover:shadow-card transition-smooth p-3"
                     >
                       <div className="h-10 w-10 rounded-lg bg-brand-yellow text-brand-black grid place-items-center shrink-0">
                         <Phone className="h-4 w-4" />
@@ -111,7 +111,7 @@ const Contact = () => {
                 href={`https://wa.me/88${WHATSAPP}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-4 rounded-xl border border-border bg-background hover:border-[#25D366] hover:shadow-card transition-smooth p-3"
+                className="hover-press flex items-center gap-4 rounded-xl border border-border bg-background hover:border-[#25D366] hover:shadow-card transition-smooth p-3"
               >
                 <div className="h-12 w-12 rounded-xl bg-[#25D366] text-white grid place-items-center">
                   <MessageCircle className="h-5 w-5" />
@@ -124,7 +124,7 @@ const Contact = () => {
 
               <a
                 href={`mailto:${EMAIL}`}
-                className="flex items-center gap-4 rounded-xl border border-border bg-background hover:border-brand-yellow hover:shadow-card transition-smooth p-3"
+                className="hover-press flex items-center gap-4 rounded-xl border border-border bg-background hover:border-brand-yellow hover:shadow-card transition-smooth p-3"
               >
                 <div className="h-12 w-12 rounded-xl bg-brand-yellow text-brand-black grid place-items-center">
                   <Mail className="h-5 w-5" />
@@ -163,7 +163,7 @@ const Contact = () => {
               </div>
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("vehicle_needed")}</label>
-                <select name="car" className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-3 text-sm outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth">
+                <select name="car" className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-3 text-sm outline-none hover:border-brand-yellow/50 focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth">
                   {fleet.map((c) => (
                     <option key={c.key}>{c.name}</option>
                   ))}
@@ -176,14 +176,14 @@ const Contact = () => {
                   rows={4}
                   maxLength={1000}
                   placeholder={t("msg_ph")}
-                  className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-3 text-sm outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth resize-none"
+                  className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-3 text-sm outline-none hover:border-brand-yellow/50 focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth resize-none"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-yellow text-brand-black font-semibold py-3.5 hover:bg-brand-black hover:text-brand-yellow transition-smooth disabled:opacity-60"
+                className="hover-press w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-yellow text-brand-black font-semibold py-3.5 hover:bg-brand-black hover:text-brand-yellow transition-smooth disabled:opacity-60"
               >
                 {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <>{t("send_request")} <Send className="h-4 w-4" /></>}
               </button>
@@ -200,7 +200,7 @@ const Input = ({ label, ...props }: { label: string } & React.InputHTMLAttribute
     <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</label>
     <input
       {...props}
-      className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-3 text-sm outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth"
+      className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-3 text-sm outline-none hover:border-brand-yellow/50 focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition-smooth"
     />
   </div>
 );

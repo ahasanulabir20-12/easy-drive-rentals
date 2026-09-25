@@ -115,7 +115,7 @@ const TimeField = ({ value, onChange }: Props) => {
               type="time"
               value={value}
               onChange={(e) => onChange(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-brand-yellow"
+              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none hover:border-brand-yellow/50 focus:border-brand-yellow transition-smooth"
             />
           </div>
         </PopoverContent>

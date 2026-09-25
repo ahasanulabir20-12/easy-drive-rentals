@@ -38,7 +38,7 @@ const Header = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setLang(lang === "en" ? "bn" : "en")}
-            className="inline-flex items-center gap-1.5 rounded-full border border-white/15 text-white/90 hover:text-brand-yellow hover:border-brand-yellow/60 px-3 py-1.5 text-xs font-semibold transition-smooth"
+            className="hover-press inline-flex items-center gap-1.5 rounded-full border border-white/15 text-white/90 hover:text-brand-yellow hover:border-brand-yellow/60 px-3 py-1.5 text-xs font-semibold transition-smooth"
             aria-label="Toggle language"
           >
             <Languages className="h-3.5 w-3.5" />
@@ -53,7 +53,7 @@ const Header = () => {
           </a>
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            className="md:hidden inline-flex items-center justify-center rounded-full border border-white/15 text-white/90 hover:text-brand-yellow hover:border-brand-yellow/60 h-9 w-9 transition-smooth"
+            className="hover-press md:hidden inline-flex items-center justify-center rounded-full border border-white/15 text-white/90 hover:text-brand-yellow hover:border-brand-yellow/60 h-9 w-9 transition-smooth"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
           >
