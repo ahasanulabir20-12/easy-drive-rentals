@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Users, Fuel, Cog } from "lucide-react";
-import noahFront from "@/assets/noah-front.jpg.asset.json";
-import hiaceFront from "@/assets/hiace-front.jpg.asset.json";
-import allionFront from "@/assets/allion-front.jpg.asset.json";
+import noahFront from "@/assets/noah-front.jpg";
+import hiaceFront from "@/assets/hiace-front.jpg";
+import allionFront from "@/assets/allion-front.jpg";
 import { useLang } from "@/context/LanguageContext";
 import type { CarKey } from "@/data/fleet";
 
