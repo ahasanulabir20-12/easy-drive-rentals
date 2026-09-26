@@ -253,6 +253,28 @@ export const districts: District[] = [
   { en: "Tejgaon Airport (Dhaka)", bn: "তেজগাঁও বিমানবন্দর (ঢাকা)", lat: 23.7789, lng: 90.3823 },
   { en: "Bagerhat Khan Jahan Ali Airport", bn: "বাগেরহাট খান জাহান আলী বিমানবন্দর", lat: 22.7830, lng: 89.8500 },
 
+  // Hospitals
+  { en: "Dhaka Medical College Hospital", bn: "ঢাকা মেডিকেল কলেজ হাসপাতাল", lat: 23.7257, lng: 90.3984 },
+  { en: "Square Hospital (Dhaka)", bn: "স্কয়ার হাসপাতাল (ঢাকা)", lat: 23.7528, lng: 90.3817 },
+  { en: "Evercare Hospital Dhaka", bn: "এভারকেয়ার হাসপাতাল ঢাকা", lat: 23.7937, lng: 90.4066 },
+  { en: "BSMMU Hospital (Shahbag)", bn: "বিএসএমএমইউ হাসপাতাল (শাহবাগ)", lat: 23.7416, lng: 90.3861 },
+  { en: "Chattogram Medical College Hospital", bn: "চট্টগ্রাম মেডিকেল কলেজ হাসপাতাল", lat: 22.3590, lng: 91.8320 },
+  { en: "Sylhet MAG Osmani Medical College Hospital", bn: "সিলেট এমএজি ওসমানী মেডিকেল কলেজ হাসপাতাল", lat: 24.8999, lng: 91.8530 },
+
+  // Railway stations
+  { en: "Kamalapur Railway Station (Dhaka)", bn: "কমলাপুর রেলওয়ে স্টেশন (ঢাকা)", lat: 23.7330, lng: 90.4285 },
+  { en: "Chattogram Railway Station", bn: "চট্টগ্রাম রেলওয়ে স্টেশন", lat: 22.3430, lng: 91.8300 },
+  { en: "Sylhet Railway Station", bn: "সিলেট রেলওয়ে স্টেশন", lat: 24.8930, lng: 91.8690 },
+  { en: "Khulna Railway Station", bn: "খুলনা রেলওয়ে স্টেশন", lat: 22.8090, lng: 89.5610 },
+  { en: "Rajshahi Railway Station", bn: "রাজশাহী রেলওয়ে স্টেশন", lat: 24.3630, lng: 88.6010 },
+
+  // Schools, colleges & universities
+  { en: "University of Dhaka", bn: "ঢাকা বিশ্ববিদ্যালয়", lat: 23.7337, lng: 90.3928 },
+  { en: "BUET (Bangladesh University of Engineering)", bn: "বুয়েট (বাংলাদেশ প্রকৌশল বিশ্ববিদ্যালয়)", lat: 23.7266, lng: 90.3886 },
+  { en: "Dhaka College", bn: "ঢাকা কলেজ", lat: 23.7317, lng: 90.3845 },
+  { en: "Notre Dame College (Dhaka)", bn: "নটর ডেম কলেজ (ঢাকা)", lat: 23.7272, lng: 90.4078 },
+  { en: "Viqarunnisa Noon School", bn: "ভিকারুননিসা নূন স্কুল", lat: 23.7420, lng: 90.3930 },
+
   // Tongibari & Louhajang areas
   { en: "Agla", bn: "আগলা", lat: 23.4600, lng: 90.3300 },
   { en: "Akotpara", bn: "আকোতপারা", lat: 23.4845, lng: 90.3630 },

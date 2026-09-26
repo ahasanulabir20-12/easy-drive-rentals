@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { MapPin, ArrowRight, Car as CarIconLucide, Phone, MessageCircle, Timer, Plane, Hospital } from "lucide-react";
+import { MapPin, ArrowRight, Car as CarIconLucide, Phone, MessageCircle } from "lucide-react";
 import heroCar from "@/assets/hero-car.jpg";
-import { districts, distanceKm, isInsideDhakaDivision, estimateMinutes, formatDuration } from "@/data/districts";
+import { districts, distanceKm, isInsideDhakaDivision, estimateMinutes } from "@/data/districts";
 import { fleet, formatBDT, formatRange, type CarKey } from "@/data/fleet";
 import CarIcon from "@/components/site/CarIcon";
 import { useLang } from "@/context/LanguageContext";
@@ -9,6 +9,7 @@ import BookingModal, { type BookingPayload } from "@/components/site/BookingModa
 import DateField from "@/components/site/DateField";
 import TimeField from "@/components/site/TimeField";
 import HeroCarShowcase from "@/components/site/HeroCarShowcase";
+import RoutePreview from "@/components/site/RoutePreview";
 
 
 const WHATSAPP = "8801709539837";
@@ -209,28 +210,14 @@ const Hero = () => {
 
           {/* Trip estimate / route preview */}
           <div className="mt-6 rounded-2xl border border-border/70 bg-muted/10 p-5 sm:p-6">
-            <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
-              <h4 className="font-display font-semibold text-base text-brand-black flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-brand-red" />
-                {t("route_preview")}
-              </h4>
-              <div className="flex items-center gap-2 flex-wrap">
-                {approxKm != null && (
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-100 rounded-full px-3 py-1.5">
-                    <MapPin className="h-3 w-3" /> {t("distance")}: ≈ {approxKm} km ({approxWord})
-                  </span>
-                )}
-                {minutes != null && (
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand-black bg-brand-yellow/25 rounded-full px-3 py-1.5">
-                    <Timer className="h-3 w-3" /> {t("est_time")}: ≈ {formatDuration(minutes)}
-                  </span>
-                )}
-
-              </div>
-            </div>
-
             {!matchedFrom || !matchedTo ? (
-              <p className="text-sm text-muted-foreground py-10 text-center">{t("pick_route")}</p>
+              <>
+                <h4 className="font-display font-semibold text-base text-brand-black flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-brand-red" />
+                  {t("route_preview")}
+                </h4>
+                <p className="text-sm text-muted-foreground py-10 text-center">{t("pick_route")}</p>
+              </>
             ) : (
               <div
                 key={`${matchedFrom.en}-${matchedTo.en}-${car.key}`}
@@ -328,215 +315,6 @@ const Stat = ({ value }: { value: string }) => (
   </span>
 );
 
-/* ---------- Small illustrated scene pieces (kept as reusable vector components) ---------- */
-const SceneTree = ({ x, y, s = 1, c = "#4ade80" }: { x: number; y: number; s?: number; c?: string }) => (
-  <g transform={`translate(${x} ${y}) scale(${s})`}>
-    <rect x="-2" y="0" width="4" height="9" fill="#92653b" />
-    <circle cx="-6" cy="-3" r="6.5" fill={c} opacity="0.85" />
-    <circle cx="6" cy="-3" r="6.5" fill={c} opacity="0.85" />
-    <circle cx="0" cy="-8" r="8.5" fill={c} />
-  </g>
-);
-
-const ScenePond = ({ x, y, rx = 24, ry = 10 }: { x: number; y: number; rx?: number; ry?: number }) => (
-  <g transform={`translate(${x} ${y})`}>
-    <ellipse rx={rx} ry={ry} fill="#7dd3fc" opacity="0.55" />
-    <ellipse rx={rx * 0.55} ry={ry * 0.4} cy={-ry * 0.3} fill="#e0f2fe" opacity="0.7" />
-  </g>
-);
-
-const SceneHome = ({ x, y }: { x: number; y: number }) => (
-  <g transform={`translate(${x} ${y})`}>
-    <rect x="-12" y="-2" width="24" height="17" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1" />
-    <path d="M -15 -2 L 0 -15 L 15 -2 Z" fill="#f59e0b" />
-    <rect x="-3.5" y="5" width="7" height="10" fill="#92653b" />
-    <rect x="5" y="2" width="4.5" height="4.5" fill="#7dd3fc" stroke="#94a3b8" strokeWidth="0.6" />
-    <rect x="-9.5" y="2" width="4.5" height="4.5" fill="#7dd3fc" stroke="#94a3b8" strokeWidth="0.6" />
-  </g>
-);
-
-const SceneBuildings = ({ x, y }: { x: number; y: number }) => {
-  const blocks = [
-    { dx: 0, h: 46, w: 15, fill: "#cbd5e1" },
-    { dx: 17, h: 64, w: 15, fill: "#94a3b8" },
-    { dx: 34, h: 38, w: 15, fill: "#cbd5e1" },
-  ];
-  return (
-    <g transform={`translate(${x} ${y})`} opacity="0.92">
-      {blocks.map((b, i) => (
-        <g key={i} transform={`translate(${b.dx} ${-b.h})`}>
-          <rect width={b.w} height={b.h} fill={b.fill} />
-          {Array.from({ length: Math.max(1, Math.floor(b.h / 11)) }).map((_, r) => (
-            <g key={r}>
-              <rect x={3} y={6 + r * 11} width={3} height={3.5} fill="#fefce8" opacity="0.85" />
-              <rect x={b.w - 6} y={6 + r * 11} width={3} height={3.5} fill="#fefce8" opacity="0.6" />
-            </g>
-          ))}
-        </g>
-      ))}
-    </g>
-  );
-};
-
-const SceneCar = ({ x, y, className = "" }: { x: number; y: number; className?: string }) => (
-  <g transform={`translate(${x} ${y})`} className={className}>
-    <ellipse cx="0" cy="15" rx="17" ry="3" fill="#000" opacity="0.16" />
-    <path d="M -17 6 Q -15 -7 -6 -9 L 6 -9 Q 15 -7 17 6 Z" fill="#fafafa" stroke="#cbd5e1" strokeWidth="1" />
-    <rect x="-17" y="4" width="34" height="6" rx="3" fill="#e2e8f0" />
-    <rect x="-10" y="-9" width="7" height="5" rx="1" fill="#bae6fd" opacity="0.9" />
-    <rect x="3" y="-9" width="7" height="5" rx="1" fill="#bae6fd" opacity="0.9" />
-    <circle cx="-9" cy="10" r="3.6" fill="#18181B" />
-    <circle cx="9" cy="10" r="3.6" fill="#18181B" />
-    <circle cx="-9" cy="10" r="1.4" fill="#94a3b8" />
-    <circle cx="9" cy="10" r="1.4" fill="#94a3b8" />
-  </g>
-);
-
-/* ---------- Route Preview (illustrated road, two curve designs + conditional destination markers) ---------- */
-
-// Lucide icon path data (Plane / Hospital) embedded as nested <svg> so the marker
-// renders pixel-accurate inside the road SVG at any viewport size.
-const PLANE_ICON_PATH =
-  "M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z";
-const HOSPITAL_ICON_PATHS = [
-  "M12 6v4",
-  "M14 14h-4",
-  "M14 18h-4",
-  "M14 8h-4",
-  "M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2",
-  "M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18",
-];
-
-type DestinationMarkerType = "airport" | "hospital" | "pin";
-
-const getDestinationMarkerType = (label: string): DestinationMarkerType => {
-  const l = label.toLowerCase();
-  if (l.includes("airport") || l.includes("বিমানবন্দর")) return "airport";
-  if (l.includes("hospital") || l.includes("clinic") || l.includes("হাসপাতাল") || l.includes("ক্লিনিক")) return "hospital";
-  return "pin";
-};
-
-const RoutePreview = ({ fromLabel, toLabel, km, minutes, perKm, outside, approxWord }: { fromLabel: string; toLabel: string; km: number; minutes: number | null; perKm: number; outside: boolean; approxWord: string }) => {
-  const W = 760, H = 230;
-  const destType = useMemo(() => getDestinationMarkerType(toLabel), [toLabel]);
-
-  // Two custom road designs: a sweeping open-highway curve for "Outside Dhaka" trips,
-  // and a tighter winding street curve for "Inside Dhaka" trips.
-  const d = outside
-    ? `M 56 172 C 210 44, 330 214, 470 120 S 630 22, 706 70`
-    : `M 56 130 C 178 202, 276 32, 388 130 S 596 204, 706 106`;
-  const fromX = 56;
-  const fromY = outside ? 172 : 130;
-  const toX = 706;
-  const toY = outside ? 70 : 106;
-  const carX = outside ? 470 : 388;
-  const carY = outside ? 120 : 130;
-  const midX = W / 2 + 8;
-  const midY = outside ? 150 : 168;
-
-  const pinFill = destType === "pin" ? "#E11D48" : "#18181B";
-
-  return (
-    <div className="group relative w-full rounded-2xl overflow-hidden border border-border/60 bg-gradient-to-br from-sky-50 via-emerald-50/50 to-amber-50/40 shadow-sm transition-shadow duration-300 hover:shadow-md">
-      <style>{`
-        @keyframes ecr-drift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
-        .ecr-car { animation: ecr-drift 2.8s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
-        @media (prefers-reduced-motion: reduce) { .ecr-car { animation: none; } }
-      `}</style>
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-52 sm:h-60" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="ecr-sky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#e0f2fe" />
-            <stop offset="100%" stopColor="#ecfdf5" />
-          </linearGradient>
-          <linearGradient id="ecr-road" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#4b5563" />
-            <stop offset="100%" stopColor="#1f2937" />
-          </linearGradient>
-        </defs>
-
-        <rect x="0" y="0" width={W} height={H} fill="url(#ecr-sky)" opacity="0.5" />
-
-        {/* ponds */}
-        <ScenePond x={140} y={outside ? 200 : 40} rx={30} ry={13} />
-        <ScenePond x={600} y={outside ? 30 : 195} rx={26} ry={11} />
-
-        {/* scattered trees for depth */}
-        <SceneTree x={95} y={outside ? 148 : 60} s={0.9} c="#4ade80" />
-        <SceneTree x={225} y={outside ? 195 : 185} s={1.1} c="#22c55e" />
-        <SceneTree x={330} y={outside ? 45 : 40} s={0.8} c="#4ade80" />
-        <SceneTree x={420} y={outside ? 200 : 195} s={1} c="#22c55e" />
-        <SceneTree x={545} y={outside ? 40 : 55} s={0.9} c="#4ade80" />
-        <SceneTree x={655} y={outside ? 195 : 175} s={1} c="#22c55e" />
-
-        {/* origin home */}
-        <SceneHome x={fromX - 4} y={fromY - 42} />
-
-        {/* destination skyline for generic pin case */}
-        {destType === "pin" && <SceneBuildings x={toX + 16} y={toY + 6} />}
-
-        {/* road shadow + surface + dashed centerline */}
-        <path d={d} fill="none" stroke="#000" strokeWidth="15" strokeLinecap="round" opacity="0.08" transform="translate(0,4)" />
-        <path d={d} fill="none" stroke="url(#ecr-road)" strokeWidth="12" strokeLinecap="round" />
-        <path d={d} fill="none" stroke="#ffffff" strokeWidth="1.8" strokeDasharray="8 8" opacity="0.9" />
-
-        {/* riding car */}
-        <SceneCar x={carX} y={carY - 15} className="ecr-car" />
-
-        {/* From marker with live-pulse ring */}
-        <circle cx={fromX} cy={fromY} r="10" fill="#16A34A" opacity="0.35" className="animate-ping" />
-        <circle cx={fromX} cy={fromY} r="10" fill="#ffffff" stroke="#16A34A" strokeWidth="3.5" />
-        <circle cx={fromX} cy={fromY} r="3.5" fill="#16A34A" />
-
-        {/* Distance badge on the road */}
-        <g transform={`translate(${midX} ${midY})`}>
-          <rect x="-42" y="-16" width="84" height="32" rx="16" fill="#18181B" />
-          <text x="0" y="5" textAnchor="middle" fill="#FFD700" fontSize="14" fontWeight="800">≈ {km} km</text>
-        </g>
-
-        {/* To marker: teardrop pin, colored/iconed by destination type, with live-pulse ring */}
-        <circle cx={toX} cy={toY - 4} r="11" fill={pinFill} opacity="0.3" className="animate-ping" />
-        <g transform={`translate(${toX} ${toY})`}>
-          <path
-            d="M0 -26 C 12 -26 21 -16 21 -4 C 21 11 0 28 0 28 C 0 28 -21 11 -21 -4 C -21 -16 -12 -26 0 -26 Z"
-            fill={pinFill}
-          />
-          <circle cx="0" cy="-4" r="11" fill="#ffffff" />
-          {destType === "airport" && (
-            <svg x="-7.5" y="-11.5" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#18181B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d={PLANE_ICON_PATH} />
-            </svg>
-          )}
-          {destType === "hospital" && (
-            <svg x="-7.5" y="-11.5" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              {HOSPITAL_ICON_PATHS.map((p) => (
-                <path key={p} d={p} />
-              ))}
-            </svg>
-          )}
-          {destType === "pin" && <circle cx="0" cy="-4" r="4.5" fill="#E11D48" />}
-        </g>
-      </svg>
-
-      {/* From / To labels */}
-      <div className="absolute left-4 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-brand-black/90 text-white text-xs font-bold px-3 py-1.5 shadow-sm transition-transform duration-300 group-hover:-translate-y-0.5">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-        {fromLabel}
-      </div>
-      <div className="absolute right-4 top-3 inline-flex items-center gap-1.5 rounded-full bg-brand-black/90 text-white text-xs font-bold px-3 py-1.5 shadow-sm transition-transform duration-300 group-hover:-translate-y-0.5">
-        {destType === "airport" && <Plane className="h-3.5 w-3.5 text-brand-yellow" />}
-        {destType === "hospital" && <Hospital className="h-3.5 w-3.5 text-red-400" />}
-        {destType === "pin" && <span className="h-1.5 w-1.5 rounded-full bg-brand-red" />}
-        {toLabel}
-      </div>
-      <div className="relative text-xs text-muted-foreground text-center py-2.5 bg-background/40 border-t border-border/40">
-        {outside ? <>≈ {km} km × ৳{perKm}/km{minutes != null && <> · ~{formatDuration(minutes)}</>} ({approxWord})</> : <>≈ {km} km{minutes != null && <> · ~{formatDuration(minutes)}</>} ({approxWord})</>}
-      </div>
-
-    </div>
-  );
-};
-
 /* ---------- District autocomplete field ---------- */
 const DistrictField = ({
   icon, label, placeholder, value, onChange,
@@ -552,7 +330,7 @@ const DistrictField = ({
     const q = value.trim().toLowerCase();
     if (q.length < 2) return [];
     return districts
-      .filter((d) => d.en.toLowerCase().startsWith(q) || d.bn.startsWith(value.trim()))
+      .filter((d) => d.en.toLowerCase().includes(q) || d.bn.includes(value.trim()))
       .slice(0, 8);
   }, [value]);
 
