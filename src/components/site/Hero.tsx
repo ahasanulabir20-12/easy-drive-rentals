@@ -97,8 +97,8 @@ const Hero = () => {
       </div>
 
       <div className="container relative z-10 py-20 md:py-28 lg:py-36">
-        <div className="grid lg:grid-cols-12 gap-10 items-center">
-          <div className="lg:col-span-7 max-w-3xl">
+        <div className="grid md:grid-cols-12 gap-8 items-center">
+          <div className="md:col-span-7 max-w-3xl">
             <span className="inline-flex items-center gap-2 rounded-full bg-brand-yellow/15 border border-brand-yellow/30 px-4 py-1.5 text-xs font-semibold text-brand-yellow uppercase tracking-wider reveal">
               <span className="h-1.5 w-1.5 rounded-full bg-brand-yellow animate-pulse" />
               {t("hero_badge")}
@@ -120,7 +120,7 @@ const Hero = () => {
           </div>
 
           {/* Car showcase slider */}
-          <div className="lg:col-span-5 reveal reveal-delay-3">
+          <div className="md:col-span-5 reveal reveal-delay-3">
             <HeroCarShowcase />
 
 
