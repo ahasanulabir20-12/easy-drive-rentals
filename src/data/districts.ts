@@ -276,7 +276,6 @@ export const districts: District[] = [
   { en: "Viqarunnisa Noon School", bn: "ভিকারুননিসা নূন স্কুল", lat: 23.7420, lng: 90.3930 },
 
   // Tongibari & Louhajang areas
-  { en: "Rongmohor", bn: "রংমোহর", lat: 23.5120, lng: 90.4310 },
   { en: "Agla", bn: "আগলা", lat: 23.4600, lng: 90.3300 },
   { en: "Akotpara", bn: "আকোতপারা", lat: 23.4845, lng: 90.3630 },
   { en: "Aldi", bn: "আলদি", lat: 23.5090, lng: 90.3960 },
