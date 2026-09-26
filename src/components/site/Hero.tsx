@@ -232,20 +232,29 @@ const Hero = () => {
             {!matchedFrom || !matchedTo ? (
               <p className="text-sm text-muted-foreground py-10 text-center">{t("pick_route")}</p>
             ) : (
-              <RoutePreview
-                fromLabel={lang === "bn" ? matchedFrom.bn : matchedFrom.en}
-                toLabel={lang === "bn" ? matchedTo.bn : matchedTo.en}
-                km={approxKm!}
-                minutes={minutes}
-                perKm={car.perKm}
-                outside={outside}
-                approxWord={approxWord}
-              />
+              <div
+                key={`${matchedFrom.en}-${matchedTo.en}-${car.key}`}
+                className="animate-fade-in will-change-transform"
+              >
+                <RoutePreview
+                  fromLabel={lang === "bn" ? matchedFrom.bn : matchedFrom.en}
+                  toLabel={lang === "bn" ? matchedTo.bn : matchedTo.en}
+                  km={approxKm!}
+                  minutes={minutes}
+                  perKm={car.perKm}
+                  outside={outside}
+                  approxWord={approxWord}
+                />
+              </div>
             )}
 
 
             {estimate && (
-              <div className="mt-4 grid sm:grid-cols-2 gap-3">
+              <div
+                key={`est-${matchedFrom?.en}-${matchedTo?.en}-${car.key}`}
+                className="mt-4 grid sm:grid-cols-2 gap-3 animate-fade-in will-change-transform"
+                style={{ animationDelay: "120ms" }}
+              >
                 <div className="liquid-glass liquid-dark rounded-2xl p-4">
                   <div className="text-[10px] uppercase tracking-wider text-brand-yellow">{estimate.label} ({approxWord})</div>
                   <div className="mt-1 font-display font-bold text-2xl text-white">≈ {estimate.text}</div>

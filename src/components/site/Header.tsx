@@ -16,7 +16,7 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full bg-brand-black/95 backdrop-blur supports-[backdrop-filter]:bg-brand-black/80 border-b border-white/5">
       <div className="container flex h-16 items-center justify-between gap-3">
-        <a href="#home" className="flex items-center gap-2 group min-w-0">
+        <a href="#home" className="relative flex items-center gap-2 group min-w-0">
           <img
             src={logo}
             alt="Abir Rent A Car"
@@ -24,6 +24,16 @@ const Header = () => {
             height={48}
             className="h-12 w-12 rounded-xl object-cover ring-1 ring-white/15 shadow-sm group-hover:scale-105 transition-smooth"
           />
+          <div className="pointer-events-none absolute left-0 top-full z-50 mt-3 w-60 origin-top-left rounded-2xl border border-brand-yellow/30 bg-brand-black/95 p-2.5 shadow-2xl shadow-black/60 backdrop-blur-xl opacity-0 scale-90 translate-y-2 invisible transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 group-hover:visible">
+            <img
+              src={logo}
+              alt="Abir Rent A Car poster"
+              className="w-full rounded-xl ring-1 ring-brand-yellow/40 shadow-[0_0_30px_rgba(250,204,21,0.25)]"
+            />
+            <p className="mt-2 text-center font-display text-sm font-bold text-white">
+              Abir <span className="text-brand-yellow">Rent A Car</span>
+            </p>
+          </div>
           <span className="font-display font-bold text-lg sm:text-xl text-white hidden xs:inline sm:inline leading-tight">
             Abir <span className="text-brand-yellow">Rent A Car</span>
           </span>
