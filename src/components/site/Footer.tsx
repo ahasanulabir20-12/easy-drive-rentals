@@ -5,7 +5,7 @@ import { useLang } from "@/context/LanguageContext";
 const Footer = () => {
   const { t } = useLang();
   const navLinks = [
-    { href: "#fleet", label: t("nav_fleet") },
+    { href: "#our-cars", label: t("nav_fleet") },
     { href: "#pricing", label: t("nav_pricing") },
     { href: "#services", label: t("nav_services") },
     { href: "#contact", label: t("nav_contact") },
