@@ -4,7 +4,7 @@ type Lang = "en" | "bn";
 
 const dict = {
   en: {
-    nav_fleet: "Cars", nav_pricing: "Pricing", nav_services: "Services", nav_contact: "Contact",
+    nav_pricing: "Pricing", nav_services: "Services", nav_contact: "Contact",
     call_now: "Call Now",
     hero_badge: "Premium Car Rental · All Over Bangladesh",
     hero_title_1: "Your Premium Ride,", hero_title_accent: "Just a Click", hero_title_2: " Away",
@@ -12,7 +12,7 @@ const dict = {
     book_ride: "Book Your Ride", inside: "Inside Dhaka", outside: "Outside Dhaka",
     from: "From", to: "To", date: "Date", pickup_time: "Pickup Time", search_cars: "Search Cars",
     pickup_ph: "Type area (e.g. Mir)", dest_ph: "Type area (e.g. Uttara)",
-    seats: "Seats", book_now: "Book Now",
+    seats: "Seats",
     pricing_kicker: "Transparent Pricing", pricing_title: "Estimated Fare Guide",
     pricing_sub: "Clear, upfront pricing for every vehicle. Fares are estimates — final price may vary by location, fuel cost, distance, and time.",
     th_vehicle: "Vehicle Type", th_area: "Service Area", th_fare: "Estimated Base Fare",
@@ -39,13 +39,6 @@ const dict = {
     inside_dhaka_daily: "Inside Dhaka — Daily Package",
     book_via_wa: "Book via WhatsApp", call_to_book: "Call to Book",
     est_time: "Est. Time", auto_switched: "Auto-switched based on route",
-    our_cars: "Our Cars", our_cars_title: "Pick the class that fits your trip",
-    cat_sedan: "Sedan", cat_micro: "Microbus", cat_bus: "Coach / Bus",
-    cat_sedan_d: "Comfortable 4-seater for city rides, airport & business travel.",
-    cat_micro_d: "Spacious 7–12 seater for families, tours & group transfers.",
-    cat_bus_d: "27–45 seater coach for weddings, corporate events & long tours.",
-    ac_dual: "Dual AC", ac_single: "Single AC", engine: "Engine", fuel: "Fuel",
-    view_drivers: "Driver Preview", our_drivers: "Meet Our Drivers", experience: "yrs exp",
     // Trust stats
     trust_customers: "10,000+ Happy Customers",
     trust_rides: "50,000+ Rides Completed",
@@ -62,7 +55,7 @@ const dict = {
     tip6_t: "Inspect Before You Go", tip6_d: "Take photos of the vehicle before and after the trip. Note any existing damage to avoid disputes later.",
   },
   bn: {
-    nav_fleet: "গাড়ি", nav_pricing: "মূল্য তালিকা", nav_services: "সেবা", nav_contact: "যোগাযোগ",
+    nav_pricing: "মূল্য তালিকা", nav_services: "সেবা", nav_contact: "যোগাযোগ",
     call_now: "এখনই কল করুন",
     hero_badge: "প্রিমিয়াম কার রেন্টাল · সারা বাংলাদেশে",
     hero_title_1: "আপনার প্রিমিয়াম রাইড,", hero_title_accent: "এক ক্লিকেই", hero_title_2: " হাজির",
@@ -70,7 +63,7 @@ const dict = {
     book_ride: "আপনার রাইড বুক করুন", inside: "ঢাকার ভিতরে", outside: "ঢাকার বাইরে",
     from: "কোথা থেকে", to: "কোথায়", date: "তারিখ", pickup_time: "পিকআপ সময়", search_cars: "গাড়ি খুঁজুন",
     pickup_ph: "এলাকার নাম লিখুন (যেমন মিরপুর)", dest_ph: "এলাকার নাম লিখুন (যেমন উত্তরা)",
-    seats: "সিট", book_now: "এখনই বুক করুন",
+    seats: "সিট",
     pricing_kicker: "স্বচ্ছ মূল্য", pricing_title: "আনুমানিক ভাড়ার তালিকা",
     pricing_sub: "প্রতিটি গাড়ির আনুমানিক ভাড়া। চূড়ান্ত মূল্য স্থান, জ্বালানি, দূরত্ব ও সময় অনুযায়ী পরিবর্তন হতে পারে।",
     th_vehicle: "গাড়ির ধরন", th_area: "সেবার এলাকা", th_fare: "আনুমানিক ভাড়া",
@@ -97,13 +90,6 @@ const dict = {
     inside_dhaka_daily: "ঢাকার ভিতরে — দৈনিক প্যাকেজ",
     book_via_wa: "হোয়াটসঅ্যাপে বুক করুন", call_to_book: "কল করে বুক করুন",
     est_time: "আনুমানিক সময়", auto_switched: "রুট অনুযায়ী স্বয়ংক্রিয় সিলেক্ট",
-    our_cars: "আমাদের গাড়ি", our_cars_title: "আপনার ট্রিপের জন্য গাড়ির ক্লাস বেছে নিন",
-    cat_sedan: "সেডান", cat_micro: "মাইক্রোবাস", cat_bus: "কোচ / বাস",
-    cat_sedan_d: "শহরের যাতায়াত, এয়ারপোর্ট ও বিজনেস ট্রিপের জন্য আরামদায়ক ৪ সিটার।",
-    cat_micro_d: "পরিবার, ট্যুর ও গ্রুপের জন্য প্রশস্ত ৭–১২ সিটার।",
-    cat_bus_d: "বিয়ে, কর্পোরেট ইভেন্ট ও লম্বা ট্যুরের জন্য ২৭–৪৫ সিটার কোচ।",
-    ac_dual: "ডুয়াল এসি", ac_single: "সিঙ্গেল এসি", engine: "ইঞ্জিন", fuel: "জ্বালানি",
-    view_drivers: "ড্রাইভার প্রিভিউ", our_drivers: "আমাদের ড্রাইভারদের সাথে পরিচিত হোন", experience: "বছর অভিজ্ঞতা",
     // Trust stats
     trust_customers: "১০,০০০+ সন্তুষ্ট গ্রাহক",
     trust_rides: "৫০,০০০+ সফল যাত্রা",
