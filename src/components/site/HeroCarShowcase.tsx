@@ -74,7 +74,7 @@ const HeroCarShowcase = () => {
     >
       {/* Main viewer */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-white to-white/70">
-        <div className="relative h-48 sm:h-60 lg:h-64">
+        <div className="relative h-40 sm:h-48 md:h-52">
           {cars.map((c, i) => (
             <img
               key={c.key}
@@ -135,7 +135,7 @@ const HeroCarShowcase = () => {
               i === index ? "border-brand-yellow" : "border-transparent hover:border-brand-yellow/50"
             }`}
           >
-            <img src={c.image} alt={c.name} className="h-14 w-full rounded-lg bg-muted/40 object-contain" />
+            <img src={c.image} alt={c.name} className="h-12 w-full rounded-lg bg-muted/40 object-contain" />
             <div className="mt-1 truncate text-[11px] font-bold text-brand-black">{lang === "bn" ? c.nameBn : c.name}</div>
           </button>
         ))}
