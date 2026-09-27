@@ -206,4 +206,9 @@ const HeroCarShowcase = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+export default HeroCarShowcase;
 
