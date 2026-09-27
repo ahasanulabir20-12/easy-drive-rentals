@@ -133,7 +133,7 @@ const HeroCarShowcase = () => {
         {/* stage floor line */}
         <div className="pointer-events-none absolute bottom-[26%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-yellow/40 to-transparent" />
 
-        <div className="relative h-40 sm:h-48 md:h-52">
+        <div className="relative h-56 sm:h-64 md:h-72">
           {cars.map((c, i) => (
             <div
               key={c.key}
@@ -207,28 +207,3 @@ const HeroCarShowcase = () => {
         </div>
       </div>
 
-      {/* Thumbnails */}
-      <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
-        {cars.map((c, i) => (
-          <button
-            key={c.key}
-            type="button"
-            onClick={() => select(i)}
-            className={`min-w-[104px] flex-1 rounded-xl border bg-white/5 p-1.5 text-left backdrop-blur-md transition-smooth ${
-              i === index
-                ? "border-brand-yellow/70 shadow-[0_0_16px_hsl(var(--brand-yellow)/0.25)]"
-                : "border-white/10 hover:border-brand-yellow/40"
-            }`}
-          >
-            <img src={c.image} alt={c.name} className="h-12 w-full rounded-lg object-contain" />
-            <div className="mt-1 truncate text-[11px] font-bold text-white/90">
-              {lang === "bn" ? c.nameBn : c.name}
-            </div>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-export default HeroCarShowcase;
