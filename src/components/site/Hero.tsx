@@ -158,7 +158,7 @@ const Hero = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
             <DistrictField icon={<MapPin className="h-4 w-4" />} label={t("from")} placeholder={t("pickup_ph")} value={from} onChange={setFrom} />
             <DistrictField icon={<MapPin className="h-4 w-4" />} label={t("to")} placeholder={t("dest_ph")} value={to} onChange={setTo} />
             <DateField value={date} onChange={setDate} />
@@ -167,7 +167,7 @@ const Hero = () => {
 
 
             {/* Select Car */}
-            <div className="block relative">
+            <div className="col-span-2 sm:col-span-1 block relative">
               <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t("select_car")}</span>
               <button
                 type="button"
