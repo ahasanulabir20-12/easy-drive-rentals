@@ -87,19 +87,19 @@ const HeroCarShowcase = () => {
 
   return (
     <div
-      className="liquid-glass rounded-3xl border border-brand-yellow/20 bg-brand-black/70 p-3 sm:p-4 backdrop-blur-xl shadow-card"
+      className="liquid-glass rounded-2xl border border-brand-yellow/20 bg-brand-black/70 p-2 sm:rounded-3xl sm:p-4 backdrop-blur-xl shadow-card"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       {/* Segmented progress timer */}
-      <div className="mb-3 flex gap-1.5">
+      <div className="mb-1.5 flex gap-1 sm:mb-3 sm:gap-1.5">
         {cars.map((c, i) => (
           <button
             key={c.key}
             type="button"
             aria-label={`Show ${c.name}`}
             onClick={() => select(i)}
-            className="h-1 flex-1 overflow-hidden rounded-full bg-white/15"
+            className="h-0.5 flex-1 overflow-hidden rounded-full bg-white/15 sm:h-1"
           >
             <span
               className="block h-full rounded-full bg-brand-yellow shadow-[0_0_10px_hsl(var(--brand-yellow)/0.8)]"
@@ -133,7 +133,7 @@ const HeroCarShowcase = () => {
         {/* stage floor line */}
         <div className="pointer-events-none absolute bottom-[26%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-yellow/40 to-transparent" />
 
-        <div className="relative h-56 sm:h-64 md:h-72">
+        <div className="relative h-40 sm:h-64 md:h-72">
           {cars.map((c, i) => (
             <div
               key={c.key}
@@ -148,7 +148,7 @@ const HeroCarShowcase = () => {
                 src={c.image}
                 alt={`${c.name} front view`}
                 loading={i === 0 ? "eager" : "lazy"}
-                className="absolute inset-x-0 top-1 mx-auto h-[72%] w-full object-contain drop-shadow-[0_18px_28px_rgba(0,0,0,0.65)]"
+                className="absolute inset-x-0 top-2 mx-auto h-[68%] w-full object-contain drop-shadow-[0_14px_22px_rgba(0,0,0,0.65)] sm:top-1 sm:h-[72%] sm:drop-shadow-[0_18px_28px_rgba(0,0,0,0.65)]"
               />
               {/* reflection */}
               <img
