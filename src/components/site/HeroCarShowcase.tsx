@@ -157,7 +157,7 @@ const HeroCarShowcase = () => {
                 aria-hidden
                 className="absolute inset-x-0 mx-auto w-full object-contain opacity-20 blur-[2px]"
                 style={{
-                  top: "72%",
+                  top: "68%",
                   height: "26%",
                   transform: "scaleY(-1)",
                   maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent)",
@@ -172,35 +172,35 @@ const HeroCarShowcase = () => {
           type="button"
           aria-label="Previous car"
           onClick={() => go(-1)}
-          className="absolute left-2 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition-smooth hover:border-brand-yellow/60 hover:bg-white/20"
+          className="absolute left-1.5 top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition-smooth hover:border-brand-yellow/60 hover:bg-white/20 sm:left-2 sm:h-9 sm:w-9"
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
         <button
           type="button"
           aria-label="Next car"
           onClick={() => go(1)}
-          className="absolute right-2 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition-smooth hover:border-brand-yellow/60 hover:bg-white/20"
+          className="absolute right-1.5 top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition-smooth hover:border-brand-yellow/60 hover:bg-white/20 sm:right-2 sm:h-9 sm:w-9"
         >
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
 
         {/* Floating glass info */}
-        <div className="absolute bottom-2 left-2 right-2 z-10 rounded-2xl border border-white/10 bg-black/45 px-3 py-2 backdrop-blur-xl">
-          <div className="font-display text-base font-bold uppercase tracking-wide text-brand-yellow sm:text-lg">
+        <div className="absolute bottom-1.5 left-1.5 right-1.5 z-10 rounded-xl border border-white/10 bg-black/45 px-2.5 py-1.5 backdrop-blur-xl sm:bottom-2 sm:left-2 sm:right-2 sm:rounded-2xl sm:px-3 sm:py-2">
+          <div className="font-display text-sm font-bold uppercase tracking-wide text-brand-yellow sm:text-lg">
             {lang === "bn" ? active.nameBn : active.name}
           </div>
-          <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[10px] text-white/85">
-            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/10 px-2 py-0.5">
-              <Users className="h-3 w-3 text-brand-yellow" />
+          <div className="mt-0.5 flex flex-wrap items-center gap-1 text-[9px] text-white/85 sm:mt-1 sm:gap-1.5 sm:text-[10px]">
+            <span className="inline-flex items-center gap-0.5 rounded-full border border-white/10 bg-white/10 px-1.5 py-0.5 sm:gap-1 sm:px-2">
+              <Users className="h-2.5 w-2.5 text-brand-yellow sm:h-3 sm:w-3" />
               {seatsLabel}
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/10 px-2 py-0.5">
-              <Cog className="h-3 w-3 text-brand-yellow" />
+            <span className="inline-flex items-center gap-0.5 rounded-full border border-white/10 bg-white/10 px-1.5 py-0.5 sm:gap-1 sm:px-2">
+              <Cog className="h-2.5 w-2.5 text-brand-yellow sm:h-3 sm:w-3" />
               {lang === "bn" ? active.gear.bn : active.gear.en}
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/10 px-2 py-0.5">
-              <Fuel className="h-3 w-3 text-brand-yellow" />
+            <span className="inline-flex items-center gap-0.5 rounded-full border border-white/10 bg-white/10 px-1.5 py-0.5 sm:gap-1 sm:px-2">
+              <Fuel className="h-2.5 w-2.5 text-brand-yellow sm:h-3 sm:w-3" />
               {lang === "bn" ? active.fuel.bn : active.fuel.en}
             </span>
           </div>
