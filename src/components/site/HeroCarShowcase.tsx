@@ -87,19 +87,19 @@ const HeroCarShowcase = () => {
 
   return (
     <div
-      className="liquid-glass rounded-3xl border border-brand-yellow/20 bg-brand-black/70 p-3 sm:p-4 backdrop-blur-xl shadow-card"
+      className="liquid-glass rounded-2xl border border-brand-yellow/20 bg-brand-black/70 p-2 sm:rounded-3xl sm:p-4 backdrop-blur-xl shadow-card"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       {/* Segmented progress timer */}
-      <div className="mb-3 flex gap-1.5">
+      <div className="mb-1.5 flex gap-1 sm:mb-3 sm:gap-1.5">
         {cars.map((c, i) => (
           <button
             key={c.key}
             type="button"
             aria-label={`Show ${c.name}`}
             onClick={() => select(i)}
-            className="h-1 flex-1 overflow-hidden rounded-full bg-white/15"
+            className="h-0.5 flex-1 overflow-hidden rounded-full bg-white/15 sm:h-1"
           >
             <span
               className="block h-full rounded-full bg-brand-yellow shadow-[0_0_10px_hsl(var(--brand-yellow)/0.8)]"
@@ -133,7 +133,7 @@ const HeroCarShowcase = () => {
         {/* stage floor line */}
         <div className="pointer-events-none absolute bottom-[26%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-yellow/40 to-transparent" />
 
-        <div className="relative h-56 sm:h-64 md:h-72">
+        <div className="relative h-40 sm:h-64 md:h-72">
           {cars.map((c, i) => (
             <div
               key={c.key}
@@ -148,7 +148,7 @@ const HeroCarShowcase = () => {
                 src={c.image}
                 alt={`${c.name} front view`}
                 loading={i === 0 ? "eager" : "lazy"}
-                className="absolute inset-x-0 top-1 mx-auto h-[72%] w-full object-contain drop-shadow-[0_18px_28px_rgba(0,0,0,0.65)]"
+                className="absolute inset-x-0 top-2 mx-auto h-[68%] w-full object-contain drop-shadow-[0_14px_22px_rgba(0,0,0,0.65)] sm:top-1 sm:h-[72%] sm:drop-shadow-[0_18px_28px_rgba(0,0,0,0.65)]"
               />
               {/* reflection */}
               <img
@@ -157,7 +157,7 @@ const HeroCarShowcase = () => {
                 aria-hidden
                 className="absolute inset-x-0 mx-auto w-full object-contain opacity-20 blur-[2px]"
                 style={{
-                  top: "72%",
+                  top: "68%",
                   height: "26%",
                   transform: "scaleY(-1)",
                   maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent)",
@@ -172,35 +172,35 @@ const HeroCarShowcase = () => {
           type="button"
           aria-label="Previous car"
           onClick={() => go(-1)}
-          className="absolute left-2 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition-smooth hover:border-brand-yellow/60 hover:bg-white/20"
+          className="absolute left-1.5 top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition-smooth hover:border-brand-yellow/60 hover:bg-white/20 sm:left-2 sm:h-9 sm:w-9"
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
         <button
           type="button"
           aria-label="Next car"
           onClick={() => go(1)}
-          className="absolute right-2 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition-smooth hover:border-brand-yellow/60 hover:bg-white/20"
+          className="absolute right-1.5 top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition-smooth hover:border-brand-yellow/60 hover:bg-white/20 sm:right-2 sm:h-9 sm:w-9"
         >
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
 
         {/* Floating glass info */}
-        <div className="absolute bottom-2 left-2 right-2 z-10 rounded-2xl border border-white/10 bg-black/45 px-3 py-2 backdrop-blur-xl">
-          <div className="font-display text-base font-bold uppercase tracking-wide text-brand-yellow sm:text-lg">
+        <div className="absolute bottom-1.5 left-1.5 right-1.5 z-10 rounded-xl border border-white/10 bg-black/45 px-2.5 py-1.5 backdrop-blur-xl sm:bottom-2 sm:left-2 sm:right-2 sm:rounded-2xl sm:px-3 sm:py-2">
+          <div className="font-display text-sm font-bold uppercase tracking-wide text-brand-yellow sm:text-lg">
             {lang === "bn" ? active.nameBn : active.name}
           </div>
-          <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[10px] text-white/85">
-            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/10 px-2 py-0.5">
-              <Users className="h-3 w-3 text-brand-yellow" />
+          <div className="mt-0.5 flex flex-wrap items-center gap-1 text-[9px] text-white/85 sm:mt-1 sm:gap-1.5 sm:text-[10px]">
+            <span className="inline-flex items-center gap-0.5 rounded-full border border-white/10 bg-white/10 px-1.5 py-0.5 sm:gap-1 sm:px-2">
+              <Users className="h-2.5 w-2.5 text-brand-yellow sm:h-3 sm:w-3" />
               {seatsLabel}
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/10 px-2 py-0.5">
-              <Cog className="h-3 w-3 text-brand-yellow" />
+            <span className="inline-flex items-center gap-0.5 rounded-full border border-white/10 bg-white/10 px-1.5 py-0.5 sm:gap-1 sm:px-2">
+              <Cog className="h-2.5 w-2.5 text-brand-yellow sm:h-3 sm:w-3" />
               {lang === "bn" ? active.gear.bn : active.gear.en}
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/10 px-2 py-0.5">
-              <Fuel className="h-3 w-3 text-brand-yellow" />
+            <span className="inline-flex items-center gap-0.5 rounded-full border border-white/10 bg-white/10 px-1.5 py-0.5 sm:gap-1 sm:px-2">
+              <Fuel className="h-2.5 w-2.5 text-brand-yellow sm:h-3 sm:w-3" />
               {lang === "bn" ? active.fuel.bn : active.fuel.en}
             </span>
           </div>
